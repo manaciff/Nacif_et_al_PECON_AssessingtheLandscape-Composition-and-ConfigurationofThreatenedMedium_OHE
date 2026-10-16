@@ -83,6 +83,7 @@ Two inputs are not tracked, because of their size or origin:
 | `03_univariate_model_selection.R` | Six specifications compared; the full a priori model; spatial sensitivity; selection uncertainty; genus-level slopes | `Data_Raw_WithCoords.csv`, Moran eigenvectors of script 02 | Table 3, Figure 7, Figures S2 to S7 and S10 |
 | `04_geometric_coupling_diagnostic.R` | Checks the identity that ties patch density to the response | `Data_Raw_WithCoords.csv` | Table S26 |
 | `05_ratio_artifact_test.R` | Permutation test of the ratio artifact; selects and reports the model of the manuscript | `Data_Raw_WithCoords.csv` | Table 4, Figure 6, Tables S28a to S28f, Figure S9 |
+| `06_spatial_autocorrelation_checks.R` | Screens negative spatial autocorrelation, tests Moran's I of the residuals, refits the reported model with the Moran eigenvectors and tests its residuals with DHARMa | `Data_Raw_WithCoords.csv`, outputs of scripts 02 and 05 | Tables S34b and S38b |
 | `08_sampling_effort_sensitivity.R` | Refits the reported model with the number of occurrence records as a covariate | `Data_Raw_WithCoords.csv`, occurrence records, shapefiles | Tables S42 and S42b |
 
 `docs/SCRIPTS.md` describes each script in more detail, and `docs/TABLE_MAP.md` lists the file behind
@@ -97,7 +98,8 @@ every table and figure of the manuscript and of the supplementary material.
    02 to 08; set `RUN_SCRIPT_00` and `RUN_SCRIPT_01` to `TRUE` at its top to include scripts 00 and 01.
    Script 00 needs the rasters.
 
-Script 02 must run before script 03, because it writes the Moran eigenvectors that script 03 reads.
+Script 02 must run before scripts 03 and 06, because it writes the Moran eigenvectors that they read;
+script 06 also reads the reported model written by script 05.
 Script 00 must run before script 01 at least once: without its table, two sampling units keep empty
 cells. On the machine used for the study, scripts 02 to 08 ran in about two minutes, script 05 being
 the slowest; script 00 takes a few minutes.
@@ -120,8 +122,8 @@ the slowest; script 00 takes a few minutes.
 
 ### Packages
 
-`here`, `terra`, `landscapemetrics`, `sf`, `tidyverse`, `readxl`, `vegan`, `adespatial`, `car`, `MuMIn`,
-`DHARMa`, `lme4`, `performance`, `ggridges`, `ggrepel`, `patchwork` and `scales`.
+`here`, `terra`, `landscapemetrics`, `sf`, `tidyverse`, `readxl`, `vegan`, `adespatial`, `spdep`, `car`,
+`MuMIn`, `DHARMa`, `lme4`, `performance`, `ggridges`, `ggrepel`, `patchwork` and `scales`.
 
 `MASS` exports `select()` and `car` exports `recode()`, which mask the `dplyr` functions of the same
 name. The scripts therefore call `dplyr::select()` where the masking could occur and do not use
