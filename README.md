@@ -56,8 +56,7 @@ Dados/FRAGSTATS_RESULT/            FRAGSTATS patch and class tables, read by scr
 Dados/Rasters/UA_RASTER/           67 per-unit rasters, read by script 00 (not tracked; see below)
 Dados/Shapefiles/                  hexagonal grid and the conservation value index layers
 08_Dados_Especies/                 per-taxon envelope polygons, read by scripts 01 and 08
-Outputs/Manuscrito/                tables and figures, one subfolder per part of the chain
-docs/                              description of each script and the table map
+Outputs/               tables and figures, one subfolder per part of the chain
 arcpy_AOH_area_full_precision.py   exports the envelope areas at full precision from ArcGIS Pro
 ```
 
