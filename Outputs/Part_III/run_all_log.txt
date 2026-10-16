@@ -1,0 +1,26 @@
+2026-10-16 06:35:07  run_all started
+2026-10-16 06:35:07  R           : R version 4.5.2 (2025-10-31 ucrt)
+2026-10-16 06:35:07  working dir : D:/Duda_Nacif_TCC
+2026-10-16 06:35:07  here()      : D:/Duda_Nacif_TCC
+2026-10-16 06:35:07  scripts     : D:/Duda_Nacif_TCC/Repositorio_GitHub/R
+2026-10-16 06:35:07  outputs     : D:/Duda_Nacif_TCC/Outputs/Manuscrito
+2026-10-16 06:35:07  RUNNING  02_constrained_ordination_and_partitioning.R
+2026-10-16 06:35:34  02_constrained_ordination_and_partitioning.R finished in 0.4 min, 23 files written
+2026-10-16 06:35:34  memory in use: 364 MB
+2026-10-16 06:35:34  RUNNING  03_univariate_model_selection.R
+2026-10-16 06:35:43  03_univariate_model_selection.R finished in 0.2 min, 29 files written
+2026-10-16 06:35:43  memory in use: 391 MB
+2026-10-16 06:35:44  RUNNING  04_geometric_coupling_diagnostic.R
+2026-10-16 06:35:45  04_geometric_coupling_diagnostic.R finished in 0.0 min, 2 files written
+2026-10-16 06:35:45  memory in use: 391 MB
+2026-10-16 06:35:45  RUNNING  05_ratio_artifact_test.R
+2026-10-16 06:36:58  05_ratio_artifact_test.R finished in 1.2 min, 15 files written
+2026-10-16 06:36:58  memory in use: 395 MB
+2026-10-16 06:36:59  RUNNING  06_spatial_autocorrelation_checks.R
+2026-10-16 06:37:06  06_spatial_autocorrelation_checks.R finished in 0.1 min, 5 files written
+2026-10-16 06:37:06  memory in use: 396 MB
+2026-10-16 06:37:07  RUNNING  08_sampling_effort_sensitivity.R
+2026-10-16 06:37:33  08_sampling_effort_sensitivity.R finished in 0.4 min, 4 files written
+2026-10-16 06:37:34  memory in use: 399 MB
+2026-10-16 06:37:34  all scripts finished
+2026-10-16 06:37:34  Sampling units in Data_Raw_WithCoords.csv: 67

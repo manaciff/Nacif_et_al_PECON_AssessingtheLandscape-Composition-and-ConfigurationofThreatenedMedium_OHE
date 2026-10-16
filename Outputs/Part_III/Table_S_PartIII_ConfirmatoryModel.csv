@@ -1,0 +1,8 @@
+"Predictor","Estimate","SE","CI_lower","CI_upper","Statistic","P_value","Source"
+"(Intercept)",11.0166,0.1493,10.724,11.3092,73.7962,1.359e-60,"Full a priori model, no selection"
+"PD_Forest_z",-0.644,0.2025,-1.0408,-0.2471,-3.1806,0.002327,"Full a priori model, no selection"
+"Mean_FRAC_Forest_z",0.3677,0.1345,0.1041,0.6312,2.7344,0.008203,"Full a priori model, no selection"
+"Mean_ENN_Forest_m_z",-0.3523,0.1829,-0.7108,0.0061,-1.9263,0.0588,"Full a priori model, no selection"
+"PROX_MN_Forest_z",1.363,0.241,0.8907,1.8354,5.6557,4.581e-07,"Full a priori model, no selection"
+"PLAND_Forest_z",-1.3062,0.3338,-1.9605,-0.6519,-3.913,0.0002353,"Full a priori model, no selection"
+"PROX_MN_Forest_z:PLAND_Forest_z",-0.7138,0.1929,-1.0918,-0.3357,-3.7002,0.0004698,"Full a priori model, no selection"

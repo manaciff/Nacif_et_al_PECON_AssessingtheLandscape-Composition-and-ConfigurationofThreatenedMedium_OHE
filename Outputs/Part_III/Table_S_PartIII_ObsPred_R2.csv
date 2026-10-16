@@ -1,0 +1,5 @@
+"Quantity","Value","Note"
+"Squared correlation, observed against predicted, hectare scale",0.6623,"annotated in the panel"
+"Squared correlation, observed against predicted, logarithmic scale",0.557,""
+"Model used for the figure",,"Gamma, interaction"
+"Largest sampling unit (ha)",386509.44,""

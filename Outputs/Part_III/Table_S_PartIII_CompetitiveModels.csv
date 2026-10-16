@@ -1,0 +1,3 @@
+"Rank","Selected_Variables","df","LogLik","AICc","Delta_AICc","Akaike_Weight"
+1,"Mean_ENN_Forest_m_z + Mean_FRAC_Forest_z + PD_Forest_z + PLAND_Forest_z + PROX_MN_Forest_z + PLAND_Forest_z:PROX_MN_Forest_z",8,-757.591,1533.664,0,0.68
+2,"Mean_FRAC_Forest_z + PD_Forest_z + PLAND_Forest_z + PROX_MN_Forest_z + PLAND_Forest_z:PROX_MN_Forest_z",7,-759.638,1535.174,1.51,0.32

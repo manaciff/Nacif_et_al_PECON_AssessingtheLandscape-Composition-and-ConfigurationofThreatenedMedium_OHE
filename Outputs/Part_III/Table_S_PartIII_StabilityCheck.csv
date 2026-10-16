@@ -1,0 +1,7 @@
+"Predictor","Beta_full","Beta_drop_PD","Beta_drop_FRAC"
+"PD_Forest_z",-0.644,NA,-0.5447
+"Mean_FRAC_Forest_z",0.3677,0.2754,NA
+"Mean_ENN_Forest_m_z",-0.3523,0.0325,-0.4443
+"PROX_MN_Forest_z",1.363,1.4296,1.4797
+"Pearson r(PD_Forest, Mean_FRAC_Forest)",0.6598,NA,NA
+"Spearman rho(PD_Forest, Mean_FRAC_Forest)",0.7289,NA,NA

@@ -1,0 +1,8 @@
+"Predictor","Beta_non_spatial","Beta_with_MEMs","Absolute_change","P_non_spatial","P_with_MEMs"
+"(Intercept)",11.0166,10.9835,0.0331,1.359e-60,3.592e-58
+"PD_Forest_z",-0.644,-0.5006,0.1434,0.002327,0.08035
+"Mean_FRAC_Forest_z",0.3677,0.3709,0.0032,0.008203,0.01646
+"Mean_ENN_Forest_m_z",-0.3523,-0.245,0.1073,0.0588,0.2241
+"PROX_MN_Forest_z",1.363,1.323,0.04,4.581e-07,1.745e-06
+"PLAND_Forest_z",-1.3062,-1.1429,0.1633,0.0002353,0.008557
+"PROX_MN_Forest_z:PLAND_Forest_z",-0.7138,-0.6727,0.041,0.0004698,0.001371

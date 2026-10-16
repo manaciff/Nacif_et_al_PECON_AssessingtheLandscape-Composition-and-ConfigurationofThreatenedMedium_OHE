@@ -1,0 +1,7 @@
+"Predictor","Importance"
+"PROX_MN_Forest_z",1
+"PLAND_Forest_z",0.9996
+"PLAND_Forest_z:PROX_MN_Forest_z",0.9987
+"Mean_FRAC_Forest_z",0.8646
+"PD_Forest_z",0.8327
+"Mean_ENN_Forest_m_z",0.6172

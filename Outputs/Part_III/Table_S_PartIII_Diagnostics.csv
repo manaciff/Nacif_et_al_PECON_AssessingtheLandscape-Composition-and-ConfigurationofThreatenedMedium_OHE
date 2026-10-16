@@ -1,0 +1,7 @@
+"Model","Test","Statistic","P_value","Assumption_met"
+"Gamma, interaction","Shapiro-Wilk (normality)",NA,NA,"not applicable"
+"Gamma, interaction","Breusch-Pagan (homoscedasticity)",NA,NA,"not applicable"
+"Gamma, interaction","Durbin-Watson (independence)",NA,NA,"not applicable"
+"Gamma, interaction","DHARMa dispersion",0.6722,0.678,"TRUE"
+"Gamma, interaction","DHARMa uniformity",0.0831,0.7432,"TRUE"
+"Gamma, interaction","DHARMa outliers",1,0.1254,"TRUE"

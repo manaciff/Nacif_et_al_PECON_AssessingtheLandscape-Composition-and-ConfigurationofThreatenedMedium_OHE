@@ -1,0 +1,8 @@
+"Predictor","Estimate","SE","CI_lower","CI_upper","Z_value","P_value","Source"
+"(Intercept)",11.0179,0.1497,10.7185,11.3172,72.1325,0,"Conditional (subset) average across 2 competitive models (Delta AICc < 2)"
+"Mean_ENN_Forest_m_z",-0.3523,0.1829,-0.7181,0.0135,1.8875,0.0591,"Conditional (subset) average across 2 competitive models (Delta AICc < 2)"
+"Mean_FRAC_Forest_z",0.3851,0.1351,0.115,0.6552,2.7946,0.0052,"Conditional (subset) average across 2 competitive models (Delta AICc < 2)"
+"PD_Forest_z",-0.5443,0.2363,-1.0134,-0.0752,2.2743,0.0229,"Conditional (subset) average across 2 competitive models (Delta AICc < 2)"
+"PLAND_Forest_z",-1.1328,0.3907,-1.9077,-0.3579,2.8652,0.0042,"Conditional (subset) average across 2 competitive models (Delta AICc < 2)"
+"PROX_MN_Forest_z",1.3629,0.2418,0.8794,1.8465,5.5247,0,"Conditional (subset) average across 2 competitive models (Delta AICc < 2)"
+"PLAND_Forest_z:PROX_MN_Forest_z",-0.7105,0.1934,-1.0973,-0.3237,3.5998,3e-04,"Conditional (subset) average across 2 competitive models (Delta AICc < 2)"

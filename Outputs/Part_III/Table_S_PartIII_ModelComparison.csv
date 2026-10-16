@@ -1,0 +1,7 @@
+"Model","Family","Structure","k","logLik_response","AICc","BIC","DHARMa_uniformity","DHARMa_dispersion","DHARMa_outliers","Delta_AICc","Delta_BIC","Weight","Residuals_OK","CV_RMSE_LOO_ha","CV_RMSE_LGO_ha","CV_RMSE_ha"
+"OLS, interaction","OLS","interaction",8,-757.013,1532.508,1547.663,0.9147,0.616,1,0,0,0.5036,TRUE,48572.3,47957.9,48572.3
+"Gamma, interaction","Gamma","interaction",8,-757.591,1533.664,1548.819,0.7432,0.678,0.1254,1.156,1.156,0.2825,TRUE,39976.5,39086.1,39976.5
+"LMM, interaction","LMM","interaction",9,-756.537,1534.231,1550.915,0.9677,0.704,1,1.723,3.252,0.2128,TRUE,NA,NA,NA
+"OLS, additive","OLS","additive",7,-765.009,1545.917,1559.451,0.7652,0.694,1,13.409,11.788,6e-04,TRUE,161764.4,126799.8,161764.4
+"Gamma, additive","Gamma","additive",7,-766.002,1547.902,1561.436,0.9799,0.2,0.1254,15.394,13.773,2e-04,TRUE,141589.1,120704,141589.1
+"LMM, additive","LMM","additive",8,-764.744,1547.971,1563.126,0.7386,0.732,1,15.463,15.463,2e-04,TRUE,NA,NA,NA

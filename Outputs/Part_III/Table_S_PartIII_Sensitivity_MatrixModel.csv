@@ -1,0 +1,8 @@
+"Predictor","Estimate","SE","CI_lower","CI_upper","Z_value","P_value","Source","VIF_full_model"
+"(Intercept)",10.9908,0.1037,10.7873,11.2112,105.9646,0,"Sensitivity: best 5-predictor subset",NA
+"Mean_FRAC_Forest_z",0.3911,0.0906,0.1928,0.5853,4.3157,1e-04,"Sensitivity: best 5-predictor subset",2.751
+"PD_Forest_z",-0.5027,0.1006,-0.701,-0.301,-4.9964,0,"Sensitivity: best 5-predictor subset",6.541
+"PLAND_Forest_z",-0.6453,0.1382,-0.924,-0.3772,-4.669,0,"Sensitivity: best 5-predictor subset",19.287
+"PROX_MN_Agropecuaria_z",0.5076,0.0679,0.3684,0.6556,7.4708,0,"Sensitivity: best 5-predictor subset",1.681
+"PROX_MN_Forest_z",1.4882,0.1677,1.1517,1.8584,8.8743,0,"Sensitivity: best 5-predictor subset",8.815
+"PLAND_Forest_z:PROX_MN_Forest_z",-0.8003,0.1341,-1.0859,-0.529,-5.9689,0,"Sensitivity: best 5-predictor subset",NA
