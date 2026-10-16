@@ -5,7 +5,7 @@ envelopes of nine threatened medium- and large-sized mammal taxa in the Atlantic
 Janeiro State, Brazil.
 
 **Author:** Maria Eduarda Nacif
-**Status:** manuscript in preparation. Last revision of the analysis chain: 8 October 2026.
+**Status:** manuscript in preparation. Last revision of the analysis chain: 15 October 2026.
 **R version:** 4.5.2
 
 ---
