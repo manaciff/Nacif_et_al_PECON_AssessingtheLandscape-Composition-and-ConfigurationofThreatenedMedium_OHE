@@ -1,0 +1,7 @@
+"Series","Test","Moran_I","Expected_I","p_two_sided","Permutations"
+"log(OHE)","permutation",0.0498,-0.0152,0.0674,9999
+"Residuals, log(OHE) on the landscape set (10 predictors)","lm.morantest, exact moments",-0.0392,-0.0284,0.621,NA
+"Residuals, log(OHE) on the landscape set and the MEMs (full partition)","lm.morantest, exact moments",-0.0588,-0.0366,0.2731,NA
+"Residuals, log(OHE) on the landscape set without the three ratio metrics and the MEMs (Table S38)","lm.morantest, exact moments",-0.0406,-0.0369,0.8522,NA
+"Quantile residuals, reported model (Table 4)","permutation of DHARMa residuals",0.1019,-0.0152,0.008,9999
+"Quantile residuals, reported model with the MEMs (Table S34b)","permutation of DHARMa residuals",-0.0089,-0.0152,0.6762,9999

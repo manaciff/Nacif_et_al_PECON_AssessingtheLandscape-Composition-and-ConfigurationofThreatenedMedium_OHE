@@ -1,0 +1,5 @@
+"Amount_measure","Pearson","Spearman","Contains_the_response"
+"PLAND_Forest",0.6606,0.9137,"yes, in its denominator"
+"CA_Forest",0.5705,0.7884,"bounded by it"
+"Mean_AREA_Forest_ha",0.3815,0.9051,"no"
+"NP_Forest",-0.0425,-0.1948,"no"

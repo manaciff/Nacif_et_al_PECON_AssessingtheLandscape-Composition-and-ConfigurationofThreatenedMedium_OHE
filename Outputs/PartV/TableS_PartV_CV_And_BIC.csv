@@ -1,0 +1,3 @@
+"Specification","k","AICc","BIC","LOO_RMSE_ha","LGO_RMSE_ha","Note"
+"Reported model, free of coupling (S4)",5,1551.56,1561.6,127921.1,110369.1,"no predictor built from the response"
+"Coupled model (S1)",8,1533.66,1548.82,39976.5,39086.1,"two predictors built from the response; every criterion favors it for that reason"

@@ -1,0 +1,10 @@
+"Predictor","RDA1_correlation","RDA2_correlation","RDA1_plotted","RDA2_plotted"
+"PD_Forest",-0.8278,0.3896,-0.8278,0.3896
+"Mean_FRAC_Forest",-0.6545,0.0612,-0.6545,0.0612
+"Mean_ENN_Forest_m",-0.7292,-0.5417,-0.7292,-0.5417
+"PROX_MN_Forest",0.6781,-0.0282,0.6781,-0.0282
+"Mean_AREA_Forest_ha",0.638,-0.0238,0.638,-0.0238
+"PD_Agropecuaria",0.503,-0.5042,0.503,-0.5042
+"PROX_MN_Agropecuaria",-0.5276,0.2173,-0.5276,0.2173
+"Mean_Elevation_m",0.3214,0.2892,0.3214,0.2892
+"Mean_Pop_Density",0.108,0.0258,0.108,0.0258

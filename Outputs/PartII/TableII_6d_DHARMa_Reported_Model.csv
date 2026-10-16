@@ -1,0 +1,7 @@
+"Model","Test","Statistic","P_value","Simulations"
+"Reported model (Table 4)","DHARMa dispersion",1.5764,0.204,1000
+"Reported model (Table 4)","DHARMa uniformity",0.1243,0.2514,1000
+"Reported model (Table 4)","DHARMa outliers",0,1,1000
+"Reported model with the MEMs (Table S34b)","DHARMa dispersion",1.6913,0.198,1000
+"Reported model with the MEMs (Table S34b)","DHARMa uniformity",0.0647,0.9415,1000
+"Reported model with the MEMs (Table S34b)","DHARMa outliers",0,1,1000

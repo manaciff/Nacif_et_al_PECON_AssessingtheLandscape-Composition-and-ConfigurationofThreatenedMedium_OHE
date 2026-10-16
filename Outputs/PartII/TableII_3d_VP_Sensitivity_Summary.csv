@@ -1,0 +1,7 @@
+"Fraction","Full_landscape_set","Without_ratio_metrics"
+"Landscape predictors (n)",10,7
+"[a] Pure landscape (X1 | X2)",0.5162,0.4377
+"[b] Shared landscape and space",0.0992,0.0195
+"[c] Pure space (X2 | X1)",0.0126,0.0923
+"[d] Residuals (unexplained)",0.372,0.4504
+"Full model (X1 + X2)",0.628,0.5496

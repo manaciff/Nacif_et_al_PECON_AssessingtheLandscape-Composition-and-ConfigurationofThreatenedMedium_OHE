@@ -1,0 +1,4 @@
+"Test","F_obs","p_val"
+"Full model (X1 + X2)",10.2855,1e-04
+"Pure landscape (X1 | X2)",9.8804,1e-04
+"Pure space (X2 | X1)",1.952,0.1543

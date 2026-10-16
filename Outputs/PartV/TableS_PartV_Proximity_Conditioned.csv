@@ -1,0 +1,5 @@
+"Specification","PROX_beta","CI_lower","CI_upper","P_value","OHE_ratio_per_SD"
+"No amount covariate",0.742,0.4937,0.9903,1.854e-07,2.1
+"Plus mean forest patch area",0.7476,0.4917,1.0034,3.202e-07,2.112
+"Plus log number of forest patches",0.3646,0.2096,0.5197,2.067e-05,1.44
+"Plus both",0.3971,0.2698,0.5244,7.551e-08,1.488

@@ -1,0 +1,8 @@
+"Metric","Value"
+"R2 (constrained proportion)",0.9178
+"Adjusted R2",0.9048
+"Constrained inertia",0.1003
+"Residual inertia",0.009
+"Global permutation p",1e-04
+"MEM global model p",0.0317
+"MEM global model adjusted R2",0.1713

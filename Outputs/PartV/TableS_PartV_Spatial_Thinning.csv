@@ -1,0 +1,4 @@
+"Predictor","Beta_full_design","Beta_thinned_median","Beta_thinned_q2.5","Beta_thinned_q97.5","Pct_replicates_p_below_0.05","N_units_per_replicate","N_replicates","N_units_in_multi_unit_clusters","N_clusters_mixing_taxa","Thinning_radius_m"
+"Forest proximity (PROX_MN)",0.742,0.807,0.7729,0.8421,100,56,200,18,7,1000
+"Shape complexity (FRAC_MN)",0.6023,0.6588,0.6427,0.6973,100,56,200,18,7,1000
+"Isolation (ENN_MN)",0.1217,0.1116,0.0992,0.1285,0,56,200,18,7,1000

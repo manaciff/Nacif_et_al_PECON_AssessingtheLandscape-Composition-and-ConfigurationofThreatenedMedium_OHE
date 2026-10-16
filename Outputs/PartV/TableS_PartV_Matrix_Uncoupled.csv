@@ -1,0 +1,9 @@
+"Specification","Predictor","Estimate","SE","CI_lower","CI_upper","P_value","OHE_ratio_per_SD","Deviance_explained","Max_VIF"
+"S4 plus farming matrix proximity","ENN_z",0.13,0.0814,-0.0296,0.2896,0.1154,1.139,0.5307,1.96
+"S4 plus farming matrix proximity","FRAC_z",0.4759,0.1005,0.2789,0.6729,1.315e-05,1.609,0.5307,1.96
+"S4 plus farming matrix proximity","PROX_z",0.8939,0.1033,0.6914,1.0964,2.943e-12,2.445,0.5307,1.96
+"S4 plus farming matrix proximity","PROXA_z",0.4002,0.0845,0.2346,0.5659,1.311e-05,1.492,0.5307,1.96
+"S4 plus farming matrix patch density","ENN_z",0.1209,0.1014,-0.0778,0.3196,0.2378,1.128,0.3609,2
+"S4 plus farming matrix patch density","FRAC_z",0.6024,0.1188,0.3696,0.8353,3.832e-06,1.827,0.3609,2
+"S4 plus farming matrix patch density","PROX_z",0.7537,0.129,0.5008,1.0066,2.066e-07,2.125,0.3609,2
+"S4 plus farming matrix patch density","PDA_z",-0.0241,0.0989,-0.218,0.1698,0.8083,0.976,0.3609,2

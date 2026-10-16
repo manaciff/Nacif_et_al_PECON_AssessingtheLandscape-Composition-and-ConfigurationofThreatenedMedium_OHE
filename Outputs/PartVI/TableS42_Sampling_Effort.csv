@@ -1,0 +1,10 @@
+"Model","Predictor","Estimate","SE","CI_lower","CI_upper","P_value","OHE_ratio_per_SD","VIF","Deviance_explained"
+"M1. Reported model (Table 4)","Intercept",10.628,0.0904,10.4508,10.8052,1.566e-75,,,0.3604
+"M1. Reported model (Table 4)","Isolation (ENN_MN)",0.1217,0.1006,-0.0754,0.3189,0.2307,1.129,1.22,
+"M1. Reported model (Table 4)","Shape complexity (FRAC_MN)",0.6023,0.1177,0.3717,0.8329,3.123e-06,1.826,1.668,
+"M1. Reported model (Table 4)","Forest proximity (PROX_MN)",0.742,0.1267,0.4937,0.9903,1.854e-07,2.1,1.934,
+"M2. Reported model plus sampling effort","Intercept",10.5449,0.0689,10.4098,10.68,1.222e-81,,,0.5692
+"M2. Reported model plus sampling effort","Isolation (ENN_MN)",0.1067,0.0768,-0.0439,0.2573,0.1698,1.113,1.224,
+"M2. Reported model plus sampling effort","Shape complexity (FRAC_MN)",0.4895,0.09,0.3131,0.666,9.7e-07,1.632,1.68,
+"M2. Reported model plus sampling effort","Forest proximity (PROX_MN)",0.4125,0.1057,0.2053,0.6197,0.0002371,1.511,2.316,
+"M2. Reported model plus sampling effort","Sampling effort, log(records + 1)",0.4884,0.0805,0.3305,0.6462,8.642e-08,1.63,1.344,

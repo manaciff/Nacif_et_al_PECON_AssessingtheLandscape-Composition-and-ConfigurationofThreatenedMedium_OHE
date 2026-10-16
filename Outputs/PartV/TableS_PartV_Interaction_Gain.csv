@@ -1,0 +1,3 @@
+"Amount_measure","AICc_additive","AICc_interaction","Delta_AICc","Verdict"
+"Coupled amount (PLAND)",1547.9,1533.66,-14.24,"the interaction earns its parameter"
+"Amount free of the response (mean patch area)",1553.96,1553.54,-0.42,"indistinguishable from the additive model; parsimony favors the additive one"

@@ -1,0 +1,5 @@
+"Fraction","Adj_R2","Pct_of_total","Interpretation"
+"[a] Pure landscape (X1 | X2)",0.5162,51.62,"Landscape effect independent of geography"
+"[b] Shared landscape and space",0.0992,9.92,"Landscape variation that is spatially structured"
+"[c] Pure space (X2 | X1)",0.0126,1.26,"Spatial structure without landscape correspondence"
+"[d] Residuals (unexplained)",0.372,37.2,"Variance not explained by either set"

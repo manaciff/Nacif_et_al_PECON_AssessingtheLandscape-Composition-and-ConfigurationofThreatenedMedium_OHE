@@ -1,0 +1,10 @@
+"Quantity","Value"
+"AICc of the retained model (S1)",1533.6641
+"AICc of the specification free of coupling (S4)",1551.5565
+"Observed advantage of S1, in AICc units",17.8924
+"Mean advantage of S1 under the null",16.1566
+"Null 95% interval, lower",4.0042
+"Null 95% interval, upper",31.4891
+"Proportion of permutations reaching the observed advantage",0.3814
+"Permutations run",2000
+"Permutations in which both models fitted without error or warning",1956
