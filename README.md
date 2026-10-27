@@ -30,8 +30,11 @@ when it follows a selection step (Yates et al., 2023).
 ## The response variable
 
 The response is the **area of the occupied habitat envelope (OHE)**, in hectares: the 99% isopleth of a
-kernel utilization distribution fitted to occurrence records, masked and split into disjoint parts, one
-per local population.
+kernel utilization distribution fitted to occurrence records, masked, clipped at the boundary of Rio de
+Janeiro State and split into spatially separate parts. L. Macedo estimated the kernels with the protocol
+of Macedo et al. (2019), who report a bandwidth of 0.02684 for their kernel maps; the repository starts
+from the resulting polygons (`08_Dados_Especies/`) and does not reproduce the kernel step. Ten units
+contain no retained record inside the state, because their kernels come from records outside it.
 
 It is **not** the Area of Habitat (AOH) of Brooks et al. (2019), the suitable habitat within a species
 range; in these data the forest inside the envelope is the closer analog of that quantity, and it
@@ -56,7 +59,8 @@ Dados/FRAGSTATS_RESULT/            FRAGSTATS patch and class tables, read by scr
 Dados/Rasters/UA_RASTER/           67 per-unit rasters, read by script 00 (not tracked; see below)
 Dados/Shapefiles/                  hexagonal grid and the conservation value index layers
 08_Dados_Especies/                 per-taxon envelope polygons, read by scripts 01 and 08
-Outputs/               tables and figures, one subfolder per part of the chain
+Outputs/                           archived tables and figures of the run of 16 October 2026, one subfolder
+                                   per part; the scripts write new copies to Outputs/Manuscrito/
 arcpy_AOH_area_full_precision.py   exports the envelope areas at full precision from ArcGIS Pro
 ```
 
@@ -142,6 +146,10 @@ name. The scripts therefore call `dplyr::select()` where the masking could occur
 2. The occurrence records span 1990 to 2020, while the land cover map is from 2024.
 3. A single kernel bandwidth, calibrated on *Panthera onca*, is applied to all taxa.
 4. Genera contribute four to twelve units each, so genus-level estimates are exploratory.
+5. The mean proximity index is not divided by the window area, but its search radius (28,230 m)
+   exceeds the equivalent circular diameter of 54 of the 67 envelopes. Patches outside an envelope are
+   not counted, so the index can rise with envelope size; the permutation null of script 05 does not
+   test this dependence.
 
 ## What is not in this repository
 
@@ -151,7 +159,7 @@ steps, and the input polygons are archived here, so both can be rebuilt.
 
 ## Changes
 
-`NEWS.md` summarizes the changes of each revision of the code.
+The commit history records the changes of each revision of the code.
 
 ## Citation
 

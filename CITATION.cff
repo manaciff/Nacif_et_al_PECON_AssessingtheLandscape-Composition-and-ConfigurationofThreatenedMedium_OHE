@@ -32,12 +32,8 @@ authors:
     affiliation: "Universidade Estadual do Norte Fluminense, Laboratório de Ciências Ambientais, Campos dos Goytacazes, Rio de Janeiro, Brazil"
 license: MIT
 version: "1.0.0"
-# TO COMPLETE BEFORE SUBMISSION. Replace the three fields below with the real
-# values, then copy them into the Data Availability statement of the manuscript.
-# They are the only placeholders left in this file.
-date-released: "AAAA-MM-DD"
-repository-code: "https://github.com/<usuario>/<repositorio>"
-doi: "10.5281/zenodo.XXXXXXX"
+# Add date-released and doi when a versioned release is archived (for example, on Zenodo).
+repository-code: "https://github.com/manaciff/Nacif_et_al_PECON_AssessingtheLandscape-Composition-and-ConfigurationofThreatenedMedium_OHE"
 keywords:
   - landscape ecology
   - habitat fragmentation
