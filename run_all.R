@@ -21,8 +21,9 @@
 #   they are switched off below. Set RUN_SCRIPT_00 and RUN_SCRIPT_01 to TRUE to
 #   reproduce the chain from the raw inputs in a single run.
 #
-#   Order matters: script 02 writes the Moran eigenvectors used by script 03,
-#   and script 08 refits the model of script 05 (Table 4).
+#   Order matters: script 02 writes the Moran eigenvectors used by scripts 03
+#   and 06, script 06 also reads the reported model of script 05 (Table 4), and
+#   script 08 refits that model.
 #
 # Run time
 #   On the machine used for the study, scripts 02 to 08 ran in about two
@@ -42,6 +43,7 @@ scripts <- c(
   "03_univariate_model_selection.R",
   "04_geometric_coupling_diagnostic.R",
   "05_ratio_artifact_test.R",
+  "06_spatial_autocorrelation_checks.R",
   "08_sampling_effort_sensitivity.R"
 )
 
