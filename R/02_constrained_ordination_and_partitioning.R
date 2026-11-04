@@ -44,6 +44,7 @@
 #   TableII_4c_RDA_Biplot_Scores.csv, TableII_4d_RDA_Axis1_Forest.csv
 #   TableII_0_Sample_Sizes.csv                          (Table S27)
 #   Figure_RDA_Biplot.tiff                              (Figure 5)
+#   TableII_4e_RDA_Without_Patch_Density.csv            (Table S39c)
 #
 # Guards
 #   The script checks its input and repairs nothing. It stops if any unit is
@@ -1139,6 +1140,41 @@ ggsave(filename    = "Figure_RDA_Biplot.tiff",
 message("   Figure_RDA_Biplot.tiff exported (Figure 5).")
 
 
+# 10.1 Sensitivity: the RDA without the two patch densities (Table S39c) -------
+# The response of the RDA is the proportion of each class in the sampling unit,
+# and forest and farming patch density are also divided by the area of the
+# unit. A shared denominator can produce correlation between ratios by itself
+# (Pearson 1897; Kronmal 1993), the same concern that removes the percentage of
+# landscape from the predictor pool. The RDA is refitted without the two
+# densities. This block runs after every other analysis of the script, so it
+# changes none of their results.
+message("\n[Sensitivity] RDA without forest and farming patch density...")
+
+preds_no_pd <- setdiff(colnames(X_RDA), c("PD_Forest", "PD_Agropecuaria"))
+stopifnot(length(preds_no_pd) == ncol(X_RDA) - 2)
+rda_no_pd <- rda(LULC_hell ~ ., data = as.data.frame(X_RDA[, preds_no_pd]))
+set.seed(GLOBAL_SEED)
+rda_no_pd_global <- anova(rda_no_pd, permutations = N_PERM)
+set.seed(GLOBAL_SEED)
+rda_no_pd_margin <- as.data.frame(anova(rda_no_pd, by = "margin",
+                                        permutations = N_PERM)) %>%
+  rownames_to_column("Predictor") %>%
+  arrange(desc(.data$F))
+rda_no_pd_R2a <- RsquareAdj(rda_no_pd)$adj.r.squared
+write.csv(
+  bind_rows(
+    data.frame(Predictor = c("Adjusted R2, all nine predictors",
+                             "Adjusted R2, without the two densities",
+                             "Global permutation p, without the two densities"),
+               Value = c(round(rda_R2a, 4), round(rda_no_pd_R2a, 4),
+                         rda_no_pd_global$`Pr(>F)`[1])),
+    rda_no_pd_margin),
+  file.path(output_path, "TableII_4e_RDA_Without_Patch_Density.csv"),
+  row.names = FALSE)
+message(sprintf("   Adjusted R2: %.3f with all predictors, %.3f without the two densities.",
+                rda_R2a, rda_no_pd_R2a))
+
+
 # 11. Output inventory [9/9] ---------------------------------------------------
 message("\n[9/9] All analyses of script 02 completed.")
 message("\nOutputs in: ", output_path)
@@ -1166,6 +1202,7 @@ message("    TableII_4_RDA_GlobalSummary.csv")
 message("    TableII_4c_RDA_Biplot_Scores.csv")
 message("    TableII_4d_RDA_Axis1_Forest.csv")
 message("    TableII_5_Response_Size_Dependence.csv")
+message("    TableII_4e_RDA_Without_Patch_Density.csv (Table S39c)")
 
 
 # 12. Session information ------------------------------------------------------

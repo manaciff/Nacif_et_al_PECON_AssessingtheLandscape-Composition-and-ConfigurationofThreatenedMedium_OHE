@@ -5,7 +5,7 @@ envelopes of nine threatened medium- and large-sized mammal taxa in the Atlantic
 Janeiro State, Brazil.
 
 **Author:** Maria Eduarda Nacif
-**Status:** manuscript in preparation. Last revision of the analysis chain: 15 October 2026.
+**Status:** manuscript in preparation. Last revision of the analysis chain: 4 November 2026.
 **R version:** 4.5.2
 
 ---
@@ -81,8 +81,8 @@ Two inputs are not tracked, because of their size or origin:
 | Script | What it does | Reads | Main outputs |
 |---|---|---|---|
 | `00_recompute_class_metrics.R` | Recomputes the class-level metrics from the rasters and fills the empty cells of two units | rasters, FRAGSTATS patch tables, `Data_Raw_FINAL.csv` | `Tabela_Metricas_Recomputada.csv`, Tables S32 and S33 |
-| `01_prepare_data_and_ordination.R` | Builds the analytical dataset; NMDS, envfit, betadisper and PERMANOVA of composition | `Data_Raw_FINAL.csv`, script 00 table, shapefiles | `Data_Raw_WithCoords.csv`, Table 1, Figures 2 to 4 |
-| `02_constrained_ordination_and_partitioning.R` | Collinearity screening, variation partitioning (landscape against space) and RDA of composition | `Data_Raw_WithCoords.csv` | Table 2, Figures 5, S1 and S8 |
+| `01_prepare_data_and_ordination.R` | Builds the analytical dataset; NMDS, envfit, betadisper and PERMANOVA of composition, repeated on Hellinger distances | `Data_Raw_FINAL.csv`, script 00 table, shapefiles | `Data_Raw_WithCoords.csv`, Table 1, Figures 2 to 4, Table S14b |
+| `02_constrained_ordination_and_partitioning.R` | Collinearity screening, variation partitioning (landscape against space) and RDA of composition, also without the two patch densities | `Data_Raw_WithCoords.csv` | Table 2, Table S39c, Figures 5, S1 and S8 |
 | `03_univariate_model_selection.R` | Six specifications compared; the full a priori model; spatial sensitivity; selection uncertainty; genus-level slopes | `Data_Raw_WithCoords.csv`, Moran eigenvectors of script 02 | Table 3, Figure 7, Figures S2 to S7 and S10 |
 | `04_geometric_coupling_diagnostic.R` | Checks the identity that ties patch density to the response | `Data_Raw_WithCoords.csv` | Table S26 |
 | `05_ratio_artifact_test.R` | Permutation test of the ratio artifact; selects and reports the model of the manuscript | `Data_Raw_WithCoords.csv` | Table 4, Figure 6, Tables S28a to S28f, Figure S9 |
@@ -117,7 +117,9 @@ the slowest; script 00 takes a few minutes.
 - AICc and BIC are both reported.
 - Term tests in the redundancy analysis are marginal; the sequential tests are exported for comparison.
 - The redundancy analysis uses Hellinger-transformed class areas, so that the size of the sampling window
-  does not enter the analysis of composition.
+  does not enter the analysis of composition. The NMDS and PERMANOVA of script 01 use Bray-Curtis
+  dissimilarities of the square root of the class area, whose first axis follows the window size, and
+  are repeated on Hellinger distances (Table S14b).
 - `sessionInfo()` is printed at the end of every script and written to `session_info_part*.txt` in the
   output folder.
 - Figures are written as TIFF files at 500 dpi with LZW compression, with Okabe-Ito colors, which remain

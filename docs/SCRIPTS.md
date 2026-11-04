@@ -58,6 +58,11 @@ differ among taxonomic and functional groups?
    the three focal classes; `envfit` of forest cover and six configuration metrics of forest;
    `betadisper` with a permutation test before PERMANOVA, because the design is unbalanced and PERMANOVA
    responds to differences in dispersion as well as in location.
+7. **Sensitivity on Hellinger distances.** The Bray-Curtis dissimilarity of the absolute class area
+   combines the proportions of the classes with the area of the unit, which is the response of the
+   univariate models; the first NMDS axis follows that area. Section 10.1 repeats the NMDS, betadisper
+   and PERMANOVA on Hellinger distances, which compare the proportions only (Table S14b). It runs after
+   every other analysis of the script, so it changes none of their results.
 
 **Figures.** Figure 2 (composition) and Figure 3 (configuration) show one density ridge per genus. Each
 density is evaluated only within the possible range of its metric (for example, 0 to 100% for the
@@ -67,7 +72,7 @@ percentage of landscape), so that no ridge extends into impossible values.
 the fourteen-predictor analysis pool used by scripts 02 and 03.
 
 **Writes.** `Data_Raw_WithCoords.csv`, the input of scripts 02 to 08; Table 1; Figures 2 to 4; Tables S3
-to S8 and S11 to S14; `TableS_NMDS_Summary.csv`, `TableS_Metric_Repair_Log.csv` and
+to S8, S11 to S14 and S14b; `TableS_NMDS_Summary.csv`, `TableS_Metric_Repair_Log.csv` and
 `TableS_Sample_Sizes_PartI.csv`.
 
 ---
@@ -101,12 +106,15 @@ variation in envelope extent is explained by the landscape once spatial structur
   because it is the composition itself. Term tests are marginal (Table 2); the sequential tests (Table
   S39b) and both tests on the square root of the absolute class area (Table S39) are exported for
   comparison.
+- **RDA without the two patch densities.** Forest and farming patch density are divided by the area of
+  the unit, as are the class proportions of the response. Section 10.1 refits the RDA without them
+  (Table S39c), after every other analysis of the script.
 
 **Checks.** The input is checked, not repaired. The script stops if any unit is incomplete over the
 analysis pool, if any unit lacks coordinates, or if edge density is zero in a unit where the class is
 present.
 
-**Writes.** Tables 2, S9, S10, S38, S39 and S39b, and part of Table S38b; Figures 5, S1 and S8; the Moran
+**Writes.** Tables 2, S9, S10, S38, S39, S39b and S39c, and part of Table S38b; Figures 5, S1 and S8; the Moran
 eigenvectors read by scripts 03 and 06 (`TableII_2b_MEM_Vectors.csv`).
 
 ---
