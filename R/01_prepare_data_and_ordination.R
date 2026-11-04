@@ -14,9 +14,13 @@
 #      and the polygon centroids.
 #   2. Describes the landscape inside each occupied habitat envelope (OHE).
 #   3. Ordinates the land cover composition by non-metric multidimensional
-#      scaling (NMDS) on Bray-Curtis dissimilarities, fits the configuration
+#      scaling (NMDS) on Hellinger distances, which compare the proportions of
+#      the classes whatever the size of the envelope, fits the configuration
 #      metrics to the ordination (envfit), and tests the grouping factors with
 #      betadisper before PERMANOVA, because the design is unbalanced.
+#   4. Repeats the tests on the amount of each cover (Bray-Curtis on the square
+#      root of class area), with envelope size entered first, and on the
+#      Aitchison distance, as sensitivity checks (Table S14b).
 #
 # Input
 #   Dados/Processados/Data_Raw_FINAL.csv               consolidated table
@@ -33,7 +37,8 @@
 #     Figure3_Ridgeline_Configuration.tiff      (Figure 3)
 #     Figure1_NMDS_Composition_Genus.tiff       (Figure 4)
 #     Tables S3 to S8 and S11 to S14, and TableS_Sample_Sizes_PartI.csv (S27)
-#     TableS_Hellinger_*.csv                    (Table S14b, sensitivity)
+#     TableS_Sensitivity_*.csv, TableS_BrayCurtis_*.csv and
+#     FigureS_NMDS_BrayCurtis_Genus.tiff        (Table S14b, Figure S1b)
 #
 # Guards
 #   Stops unless the input has 67 rows, all 67 carry coordinates, and all 67
@@ -677,9 +682,15 @@ comp_vars <- data_raw %>%
   mutate(across(everything(), ~replace_na(.x, 0)))
 names(comp_vars) <- c("Forest", "Shrub/Herb", "Farming")
 
-# NMDS on Bray-Curtis distances of the square root of the class area.
-LULC_sqrt <- sqrt(comp_vars)
-LULC_dist <- vegdist(LULC_sqrt, method = "bray", na.rm = TRUE)
+# Hellinger distance: the Euclidean distance of the square root of the relative
+# class area (Legendre & Gallagher 2001). The sampling units differ in area by
+# two orders of magnitude, and that area is the response of the univariate
+# models. A distance computed on absolute class area would compare envelope
+# size together with composition (Section 10.1 shows it); the Hellinger
+# distance compares the proportions of the classes only, as the RDA of
+# script 02 does.
+LULC_hell <- decostand(comp_vars, method = "hellinger")
+LULC_dist <- vegdist(LULC_hell, method = "euclidean")
 
 set.seed(GLOBAL_SEED)
 nmds_result <- metaMDS(LULC_dist, k = 2, trymax = 200, trace = FALSE)
@@ -690,8 +701,8 @@ write.csv(
   data.frame(
     Metric = c("NMDS stress (k = 2)", "Dimensions", "N sampling units",
                "Distance", "Transformation", "Permutations"),
-    Value  = c(round(nmds_result$stress, 4), 2, nrow(LULC_sqrt),
-               "Bray-Curtis", "square root of Class Area", N_PERM)
+    Value  = c(round(nmds_result$stress, 4), 2, nrow(LULC_hell),
+               "Hellinger (Euclidean)", "square root of relative class area", N_PERM)
   ),
   file.path(output_path, "TableS_NMDS_Summary.csv"), row.names = FALSE
 )
@@ -727,13 +738,11 @@ write.csv(envfit_vectors,
           file.path(output_path, "TableS2_Envfit_Configuration.csv"),
           row.names = FALSE)
 
-# Significant vectors, lengthened by 1.2 for display, with short labels.
+# Significant vectors, with short labels. The figure function rescales them.
 envfit_codes <- c(PLAND_Forest = "PLAND", PD_Forest = "PD", ED_Forest = "ED",
                   Mean_FRAC_Forest = "FRAC_MN", Mean_ENN_Forest_m = "ENN_MN",
                   PROX_MN_Forest = "PROX_MN", Mean_AREA_Forest_ha = "AREA_MN")
 envfit_sig <- subset(envfit_vectors, p_value < 0.05)
-envfit_sig$NMDS1  <- envfit_sig$NMDS1 * 1.2
-envfit_sig$NMDS2  <- envfit_sig$NMDS2 * 1.2
 envfit_sig$Label  <- unname(envfit_codes[envfit_sig$Metric])
 message(sprintf("   envfit: %d significant predictors (p < 0.05).",
                 nrow(envfit_sig)))
@@ -742,9 +751,8 @@ message(sprintf("   envfit: %d significant predictors (p < 0.05).",
 # with permutest() rather than anova(), because the distances to the centroid
 # are not normally distributed (Anderson & Walsh 2013). The observed F is the
 # one anova() would return; only the p-value changes. A fixed seed is set before
-# each call. betadisper() warns that some squared distances are negative and
-# changed to zero: Bray-Curtis dissimilarities are not Euclidean, and the
-# warning reports the correction that vegan applies.
+# each call. Hellinger distances are Euclidean, so no correction of negative
+# squared distances is needed.
 disp_genus   <- betadisper(LULC_dist, data_raw$GENUS)
 disp_species <- betadisper(LULC_dist, data_raw$SPECIES)
 disp_diet    <- betadisper(LULC_dist, data_raw$DIET)
@@ -792,16 +800,16 @@ write.csv(permanova_global,
           file.path(output_path, "TableS4_PERMANOVA_Global.csv"),
           row.names = FALSE)
 
-write.csv(pairwise.adonis(LULC_sqrt, data_raw$GENUS),
+write.csv(pairwise.adonis(LULC_hell, data_raw$GENUS, sim.method = "euclidean"),
           file.path(output_path, "TableS5_PERMANOVA_Pairwise_Genus.csv"),
           row.names = FALSE)
-write.csv(pairwise.adonis(LULC_sqrt, data_raw$SPECIES),
+write.csv(pairwise.adonis(LULC_hell, data_raw$SPECIES, sim.method = "euclidean"),
           file.path(output_path, "TableS5_PERMANOVA_Pairwise_Species.csv"),
           row.names = FALSE)
-write.csv(pairwise.adonis(LULC_sqrt, data_raw$DIET),
+write.csv(pairwise.adonis(LULC_hell, data_raw$DIET, sim.method = "euclidean"),
           file.path(output_path, "TableS5_PERMANOVA_Pairwise_Diet.csv"),
           row.names = FALSE)
-write.csv(pairwise.adonis(LULC_sqrt, data_raw$LOCOMOTION),
+write.csv(pairwise.adonis(LULC_hell, data_raw$LOCOMOTION, sim.method = "euclidean"),
           file.path(output_path, "TableS5_PERMANOVA_Pairwise_Locomotion.csv"),
           row.names = FALSE)
 message("   Pairwise PERMANOVA tables exported.")
@@ -884,55 +892,69 @@ message("   Composition and Configuration tables exported.")
 # envfit vectors (forest cover and the configuration metrics of forest).
 message("\n[6/10] Building Figure 4 (NMDS + envfit)...")
 
-nmds_scores <- as.data.frame(scores(nmds_result, display = "sites"))
-nmds_scores$Genus <- data_raw$GENUS
+# The same figure is drawn for the Hellinger ordination (Figure 4) and for the
+# Bray-Curtis ordination of Section 10.1 (Figure S1b). vec_sig holds the arrows
+# to draw, with columns NMDS1, NMDS2 and Label. The arrows are rescaled so that
+# the longest reaches 90% of the largest site score; their relative lengths,
+# which reflect the strength of each fit, are kept.
+plot_nmds_by_genus <- function(nmds_obj, vec_sig) {
+  nmds_scores <- as.data.frame(scores(nmds_obj, display = "sites"))
+  nmds_scores$Genus <- data_raw$GENUS
 
-hulls_genus <- nmds_scores %>%
-  group_by(Genus) %>%
-  slice(chull(NMDS1, NMDS2)) %>%
-  ungroup()
+  arrow_mult <- 0.9 * max(abs(as.matrix(nmds_scores[, c("NMDS1", "NMDS2")]))) /
+    max(sqrt(vec_sig$NMDS1^2 + vec_sig$NMDS2^2))
+  vec_sig$NMDS1 <- vec_sig$NMDS1 * arrow_mult
+  vec_sig$NMDS2 <- vec_sig$NMDS2 * arrow_mult
 
-genera_present      <- as.character(unique(data_raw$GENUS))
-colors_genus_subset <- colors_genus[names(colors_genus) %in% genera_present]
+  hulls_genus <- nmds_scores %>%
+    group_by(Genus) %>%
+    slice(chull(NMDS1, NMDS2)) %>%
+    ungroup()
 
-# Vector labels start just beyond the arrow tips. The site points enter the same
-# layer with empty labels, so that the labels are repelled from them as well
-# (ggrepel does not draw empty labels).
-nmds_labels <- rbind(
-  data.frame(x = envfit_sig$NMDS1, y = envfit_sig$NMDS2, label = envfit_sig$Label),
-  data.frame(x = nmds_scores$NMDS1, y = nmds_scores$NMDS2, label = "")
-)
-nmds_nudge_x <- ifelse(nmds_labels$label == "", 0, 0.08 * nmds_labels$x)
-nmds_nudge_y <- ifelse(nmds_labels$label == "", 0, 0.08 * nmds_labels$y)
+  genera_present      <- as.character(unique(data_raw$GENUS))
+  colors_genus_subset <- colors_genus[names(colors_genus) %in% genera_present]
 
-plot_nmds_genus <- ggplot() +
-  geom_polygon(data  = hulls_genus,
+  # Vector labels start just beyond the arrow tips. The site points enter the same
+  # layer with empty labels, so that the labels are repelled from them as well
+  # (ggrepel does not draw empty labels).
+  nmds_labels <- rbind(
+    data.frame(x = vec_sig$NMDS1, y = vec_sig$NMDS2, label = vec_sig$Label),
+    data.frame(x = nmds_scores$NMDS1, y = nmds_scores$NMDS2, label = "")
+  )
+  nmds_nudge_x <- ifelse(nmds_labels$label == "", 0, 0.08 * nmds_labels$x)
+  nmds_nudge_y <- ifelse(nmds_labels$label == "", 0, 0.08 * nmds_labels$y)
+
+  ggplot() +
+    geom_polygon(data  = hulls_genus,
+                 aes(x = NMDS1, y = NMDS2,
+                     fill = Genus, group = Genus),
+                 alpha = 0.30, colour = "grey30", linewidth = 0.3) +
+    geom_point(data  = nmds_scores,
                aes(x = NMDS1, y = NMDS2,
-                   fill = Genus, group = Genus),
-               alpha = 0.30, colour = "grey30", linewidth = 0.3) +
-  geom_point(data  = nmds_scores,
-             aes(x = NMDS1, y = NMDS2,
-                 colour = Genus, shape = Genus),
-             size = 2.2, stroke = 0.8, alpha = 0.9) +
-  geom_segment(data = envfit_sig,
-               aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2),
-               arrow = arrow(length = unit(0.18, "cm")),
-               colour = "grey15", linewidth = 0.7) +
-  ggrepel::geom_text_repel(data = nmds_labels,
-                           aes(x = x, y = y, label = label),
-                           nudge_x = nmds_nudge_x, nudge_y = nmds_nudge_y,
-                           colour = "black", size = 2.8, fontface = "bold",
-                           segment.colour = "grey60", min.segment.length = 0.2,
-                           box.padding = 0.2, max.overlaps = Inf,
-                           seed = GLOBAL_SEED) +
-  scale_fill_manual(values  = colors_genus_subset, na.value = "grey90") +
-  scale_colour_manual(values = colors_genus_subset, na.value = "grey50") +
-  scale_shape_manual(values  = shapes_genus[genera_present]) +
-  coord_equal() +
-  labs(x = "NMDS 1", y = "NMDS 2") +
-  theme_classic(base_size = 9) +
-  theme(legend.text     = element_text(face = "italic"),
-        legend.position = "right")
+                   colour = Genus, shape = Genus),
+               size = 2.2, stroke = 0.8, alpha = 0.9) +
+    geom_segment(data = vec_sig,
+                 aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2),
+                 arrow = arrow(length = unit(0.18, "cm")),
+                 colour = "grey15", linewidth = 0.7) +
+    ggrepel::geom_text_repel(data = nmds_labels,
+                             aes(x = x, y = y, label = label),
+                             nudge_x = nmds_nudge_x, nudge_y = nmds_nudge_y,
+                             colour = "black", size = 2.8, fontface = "bold",
+                             segment.colour = "grey60", min.segment.length = 0.2,
+                             box.padding = 0.2, max.overlaps = Inf,
+                             seed = GLOBAL_SEED) +
+    scale_fill_manual(values  = colors_genus_subset, na.value = "grey90") +
+    scale_colour_manual(values = colors_genus_subset, na.value = "grey50") +
+    scale_shape_manual(values  = shapes_genus[genera_present]) +
+    coord_equal() +
+    labs(x = "NMDS 1", y = "NMDS 2") +
+    theme_classic(base_size = 9) +
+    theme(legend.text     = element_text(face = "italic"),
+          legend.position = "right")
+}
+
+plot_nmds_genus <- plot_nmds_by_genus(nmds_result, envfit_sig)
 
 save_publication_plot(plot_nmds_genus,
                       file_name = "Figure1_NMDS_Composition_Genus.tiff",
@@ -1146,13 +1168,13 @@ message("   Table3b and Table1b exported.")
 # 9.1 Sample size used by each analysis (Table S27) ----------------------------
 sample_sizes_I <- data.frame(
   Analysis = c("Rows loaded",
-               "NMDS on Bray-Curtis of sqrt(CA)",
+               "NMDS on Hellinger distances",
                "PERMANOVA and betadisper",
                "envfit of configuration metrics",
                "Units with centroid coordinates",
                "Complete over the analysis pool"),
   N        = c(nrow(data_raw),
-               nrow(LULC_sqrt),
+               nrow(LULC_hell),
                nrow(as.matrix(LULC_dist)),
                n_envfit,
                sum(!is.na(data_raw$coord_x)),
@@ -1206,74 +1228,169 @@ message(sprintf(
 ))
 
 
-# 10.1 Sensitivity: the same tests on Hellinger distances (Table S14b) ---------
-# The Bray-Curtis dissimilarity of the square root of the class area combines
-# the proportions of the classes with the area of the unit, which is the
-# response of the univariate models. The Hellinger distance, the Euclidean
-# distance of the square root of the relative class area (Legendre & Gallagher
-# 2001), compares the proportions only, as the RDA of script 02 does. This block
-# repeats the NMDS, betadisper and PERMANOVA on that distance and reports how
-# closely each ordination axis follows the envelope area. It runs after every
-# other analysis of the script, so it changes none of their results.
-message("\n[Sensitivity] NMDS, betadisper and PERMANOVA on Hellinger distances...")
+# 10.1 Sensitivity: amount of each cover, envelope size, Aitchison (S14b) ------
+# Three checks of the composition tests of Section 5. They run after every other
+# analysis of the script, so they change none of the results above.
+#   (a) Bray-Curtis dissimilarity of the square root of the class area. It
+#       compares the amount of each cover in hectares, so it combines the
+#       proportions of the classes with the area of the unit (it is not
+#       invariant to the unit total; Legendre & De Caceres 2013, property P11).
+#   (b) The same dissimilarity with log(OHE) entered before the grouping factor
+#       (sequential sums of squares), which tests the factor after removing
+#       envelope size.
+#   (c) Aitchison distance: the Euclidean distance of the centered log-ratio of
+#       the proportions (Aitchison 1986). Eight units have no herbaceous and
+#       shrub vegetation, and the log-ratio needs positive parts, so each zero
+#       is replaced by 65% of one 30 m pixel (0.09 ha) expressed as a proportion
+#       of the unit, and the other parts are rescaled multiplicatively
+#       (Martin-Fernandez et al. 2003). Because the replacement value is
+#       arbitrary, the tests are repeated on the 59 units without a zero part,
+#       and the variance of each class on the two scales shows which class
+#       drives each distance.
+message("\n[Sensitivity] Bray-Curtis on class area, envelope size first, Aitchison...")
 
-LULC_hell      <- decostand(comp_vars, method = "hellinger")
-LULC_dist_hell <- vegdist(LULC_hell, method = "euclidean")
+log_area     <- log(data_raw$AOH_unit_area_ha)
+group_labels <- c(GENUS = "Genus", SPECIES = "Species",
+                  DIET = "Diet", LOCOMOTION = "Locomotion")
 
+# (a) Bray-Curtis on the square root of the class area
+LULC_sqrt    <- sqrt(comp_vars)
+LULC_dist_bc <- vegdist(LULC_sqrt, method = "bray")
 set.seed(GLOBAL_SEED)
-nmds_hell <- metaMDS(LULC_dist_hell, k = 2, trymax = 200, trace = FALSE)
+nmds_bc <- metaMDS(LULC_dist_bc, k = 2, trymax = 200, trace = FALSE)
 
-# The sign of an NMDS axis is arbitrary, so the correlations are absolute.
-log_area <- log(data_raw$AOH_unit_area_ha)
+# (c) Aitchison distance with multiplicative replacement of zeros
+pixel_ha  <- 0.09
+prop      <- as.matrix(comp_vars / rowSums(comp_vars))
+delta     <- 0.65 * pixel_ha / rowSums(comp_vars)
+n_zero    <- rowSums(prop == 0)
+prop_repl <- prop
+for (i in seq_len(nrow(prop))) {
+  if (n_zero[i] > 0) {
+    z <- prop[i, ] == 0
+    prop_repl[i, z]  <- delta[i]
+    prop_repl[i, !z] <- prop[i, !z] * (1 - n_zero[i] * delta[i])
+  }
+}
+clr_comp     <- log(prop_repl) - rowMeans(log(prop_repl))
+LULC_dist_ai <- dist(clr_comp)
+message(sprintf("   Aitchison: %d units had a zero part, replaced before the log-ratio.",
+                sum(n_zero > 0)))
+
+# NMDS axes against envelope size and forest cover. The sign of an NMDS axis is
+# arbitrary, so the correlations are absolute.
 axis_cor <- function(nm, label) {
   sc <- scores(nm, display = "sites")
-  data.frame(Distance             = label,
-             Stress               = round(nm$stress, 4),
-             abs_r_Axis1_logOHE   = round(abs(cor(sc[, 1], log_area)), 4),
-             abs_r_Axis2_logOHE   = round(abs(cor(sc[, 2], log_area)), 4),
+  data.frame(Distance                 = label,
+             Stress                   = round(nm$stress, 4),
+             abs_r_Axis1_logOHE       = round(abs(cor(sc[, 1], log_area)), 4),
+             abs_r_Axis2_logOHE       = round(abs(cor(sc[, 2], log_area)), 4),
              abs_r_Axis1_PLAND_Forest = round(abs(cor(sc[, 1], data_raw$PLAND_Forest)), 4),
              abs_r_Axis2_PLAND_Forest = round(abs(cor(sc[, 2], data_raw$PLAND_Forest)), 4))
 }
-write.csv(rbind(axis_cor(nmds_result, "Bray-Curtis, square root of class area"),
-                axis_cor(nmds_hell,   "Hellinger")),
-          file.path(output_path, "TableS_Hellinger_NMDS_Axes.csv"),
+write.csv(rbind(axis_cor(nmds_result, "Hellinger"),
+                axis_cor(nmds_bc,     "Bray-Curtis, square root of class area")),
+          file.path(output_path, "TableS_Sensitivity_NMDS_Axes.csv"),
           row.names = FALSE)
 
-group_labels <- c(GENUS = "Genus", SPECIES = "Species",
-                  DIET = "Diet", LOCOMOTION = "Locomotion")
-hell_tests <- lapply(names(group_labels), function(g) {
+# Which class drives each distance: the variance of each column of the
+# Hellinger-transformed and of the centered log-ratio matrices.
+write.csv(data.frame(Class          = colnames(comp_vars),
+                     Var_Hellinger  = round(apply(LULC_hell, 2, var), 4),
+                     Var_CLR        = round(apply(clr_comp, 2, var), 4),
+                     Median_percent = round(apply(prop, 2, median) * 100, 3),
+                     Units_with_zero = colSums(prop == 0)),
+          file.path(output_path, "TableS_Sensitivity_Class_Variance.csv"),
+          row.names = FALSE)
+
+# PERMANOVA and PERMDISP for each grouping factor and distance. betadisper()
+# warns that some squared distances are negative and changed to zero for the
+# Bray-Curtis dissimilarity, which is not Euclidean; the warning reports the
+# correction that vegan applies.
+one_test <- function(d, g, label, keep = rep(TRUE, nrow(data_raw))) {
+  grp <- droplevels(as.factor(data_raw[[g]][keep]))
   set.seed(GLOBAL_SEED)
-  ad <- adonis2(LULC_dist_hell ~ data_raw[[g]], permutations = N_PERM)
-  bd <- betadisper(LULC_dist_hell, data_raw[[g]])
+  ad <- adonis2(d ~ grp, permutations = N_PERM)
+  bd <- betadisper(d, grp)
   set.seed(GLOBAL_SEED)
   pt <- permutest(bd, permutations = N_PERM)
-  data.frame(Grouping       = group_labels[[g]],
-             Df             = ad$Df[1],
-             PERMANOVA_R2   = round(ad$R2[1], 4),
-             PERMANOVA_F    = round(ad$F[1], 4),
-             PERMANOVA_p    = ad$`Pr(>F)`[1],
-             PERMDISP_F     = round(pt$tab[1, "F"], 4),
-             PERMDISP_p     = pt$tab[1, "Pr(>F)"])
-})
-write.csv(do.call(rbind, hell_tests),
-          file.path(output_path, "TableS_Hellinger_PERMANOVA_Betadisper.csv"),
+  data.frame(Distance     = label,
+             Grouping     = group_labels[[g]],
+             Term         = group_labels[[g]],
+             Df           = ad$Df[1],
+             PERMANOVA_R2 = round(ad$R2[1], 4),
+             PERMANOVA_F  = round(ad$F[1], 4),
+             PERMANOVA_p  = ad$`Pr(>F)`[1],
+             PERMDISP_F   = round(pt$tab[1, "F"], 4),
+             PERMDISP_p   = pt$tab[1, "Pr(>F)"])
+}
+# (b) the factor after log(OHE); the first row is log(OHE), the second the factor
+size_first <- function(g) {
+  set.seed(GLOBAL_SEED)
+  ad <- adonis2(LULC_dist_bc ~ log_area + data_raw[[g]],
+                by = "terms", permutations = N_PERM)
+  data.frame(Distance     = "Bray-Curtis, log(OHE) entered first",
+             Grouping     = group_labels[[g]],
+             Term         = c("log(OHE)", group_labels[[g]]),
+             Df           = ad$Df[1:2],
+             PERMANOVA_R2 = round(ad$R2[1:2], 4),
+             PERMANOVA_F  = round(ad$F[1:2], 4),
+             PERMANOVA_p  = ad$`Pr(>F)`[1:2],
+             PERMDISP_F   = NA,
+             PERMDISP_p   = NA)
+}
+sens_tests <- do.call(rbind, c(
+  lapply(names(group_labels), function(g)
+    one_test(LULC_dist_bc, g, "Bray-Curtis, square root of class area")),
+  lapply(names(group_labels), size_first),
+  lapply(names(group_labels), function(g)
+    one_test(LULC_dist_ai, g, "Aitchison")),
+  lapply(names(group_labels), function(g)
+    one_test(dist(clr_comp[n_zero == 0, ]), g,
+             sprintf("Aitchison, the %d units without a zero part", sum(n_zero == 0)),
+             keep = n_zero == 0))))
+write.csv(sens_tests,
+          file.path(output_path, "TableS_Sensitivity_Composition_Tests.csv"),
           row.names = FALSE)
-write.csv(pairwise.adonis(LULC_hell, data_raw$GENUS, sim.method = "euclidean"),
-          file.path(output_path, "TableS_Hellinger_PERMANOVA_Pairwise_Genus.csv"),
+
+write.csv(pairwise.adonis(LULC_sqrt, data_raw$GENUS),
+          file.path(output_path, "TableS_BrayCurtis_PERMANOVA_Pairwise_Genus.csv"),
           row.names = FALSE)
-write.csv(pairwise.adonis(LULC_hell, data_raw$SPECIES, sim.method = "euclidean"),
-          file.path(output_path, "TableS_Hellinger_PERMANOVA_Pairwise_Species.csv"),
+write.csv(pairwise.adonis(LULC_sqrt, data_raw$SPECIES),
+          file.path(output_path, "TableS_BrayCurtis_PERMANOVA_Pairwise_Species.csv"),
           row.names = FALSE)
-message(sprintf("   Hellinger: stress = %.4f; genus PERMANOVA R2 = %.3f, p = %.4f.",
-                nmds_hell$stress, hell_tests[[1]]$PERMANOVA_R2,
-                hell_tests[[1]]$PERMANOVA_p))
+
+# Figure S1b: the Bray-Curtis ordination, with the envelope size and forest
+# cover fitted as vectors.
+set.seed(GLOBAL_SEED)
+envfit_bc <- envfit(nmds_bc,
+                    data.frame(log_OHE = log_area, PLAND_Forest = data_raw$PLAND_Forest),
+                    permutations = N_PERM)
+envfit_bc_vectors <- as.data.frame(scores(envfit_bc, display = "vectors"))
+envfit_bc_vectors$Metric  <- rownames(envfit_bc_vectors)
+envfit_bc_vectors$R2      <- envfit_bc$vectors$r
+envfit_bc_vectors$p_value <- envfit_bc$vectors$pvals
+write.csv(envfit_bc_vectors,
+          file.path(output_path, "TableS_BrayCurtis_Envfit.csv"),
+          row.names = FALSE)
+bc_arrows <- envfit_bc_vectors
+bc_arrows$Label <- c(log_OHE = "log OHE", PLAND_Forest = "PLAND")[bc_arrows$Metric]
+save_publication_plot(plot_nmds_by_genus(nmds_bc, bc_arrows),
+                      file_name = "FigureS_NMDS_BrayCurtis_Genus.tiff",
+                      width_mm  = 190, height_mm = 150)
+
+message(sprintf(paste0("   Bray-Curtis: stress = %.4f; genus R2 = %.3f, p = %.4f; ",
+                       "genus after log(OHE) p = %.4f; Aitchison genus p = %.4f."),
+                nmds_bc$stress, sens_tests$PERMANOVA_R2[1], sens_tests$PERMANOVA_p[1],
+                sens_tests$PERMANOVA_p[6], sens_tests$PERMANOVA_p[13]))
 
 
 # 11. Output inventory [10/10] -------------------------------------------------
 message("\n[10/10] All analyses of script 01 completed.")
 message("\nOutputs in: ", output_path)
 message("  Figures:")
-message("    Figure1_NMDS_Composition_Genus.tiff      (Figure 4)")
+message("    Figure1_NMDS_Composition_Genus.tiff      (Figure 4, Hellinger)")
+message("    FigureS_NMDS_BrayCurtis_Genus.tiff       (Figure S1b)")
 message("    Figure2_Ridgeline_Composition.tiff       (Figure 2)")
 message("    Figure3_Ridgeline_Configuration.tiff     (Figure 3)")
 message("  Tables:")
@@ -1287,7 +1404,7 @@ message("    TableS4_PERMANOVA_Global.csv")
 message("    TableS5_PERMANOVA_Pairwise_{Genus,Species,Diet,Locomotion}.csv")
 message("    TableS_Metric_Repair_Log.csv            (cells filled from script 00)")
 message("    TableS_Sample_Sizes_PartI.csv           (n per analysis; all = 67)")
-message("    TableS_Hellinger_*.csv                  (Table S14b, sensitivity)")
+message("    TableS_Sensitivity_*.csv, TableS_BrayCurtis_*.csv (Table S14b)")
 message("\nData written for scripts 02 to 08:")
 message("    ", file.path(data_path, "Data_Raw_WithCoords.csv"))
 

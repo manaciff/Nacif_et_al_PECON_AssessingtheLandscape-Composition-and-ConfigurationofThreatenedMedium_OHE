@@ -54,15 +54,18 @@ differ among taxonomic and functional groups?
    `NA` in a class that is present is a missing value, and the run stops.
 5. **Centroids** of the sampling units, from the per-taxon shapefiles. Invalid geometries are repaired,
    and the point on the surface replaces a centroid that falls outside its polygon.
-6. **Ordination and tests.** NMDS on Bray-Curtis dissimilarities of the square root of the class area of
-   the three focal classes; `envfit` of forest cover and six configuration metrics of forest;
+6. **Ordination and tests.** NMDS on Hellinger distances (the Euclidean distance of the square root of
+   the relative class area) of the three focal classes, which compare the proportions of the classes
+   whatever the size of the envelope; `envfit` of forest cover and six configuration metrics of forest;
    `betadisper` with a permutation test before PERMANOVA, because the design is unbalanced and PERMANOVA
    responds to differences in dispersion as well as in location.
-7. **Sensitivity on Hellinger distances.** The Bray-Curtis dissimilarity of the absolute class area
-   combines the proportions of the classes with the area of the unit, which is the response of the
-   univariate models; the first NMDS axis follows that area. Section 10.1 repeats the NMDS, betadisper
-   and PERMANOVA on Hellinger distances, which compare the proportions only (Table S14b). It runs after
-   every other analysis of the script, so it changes none of their results.
+7. **Sensitivity to the distance.** Section 10.1 repeats the tests (a) on Bray-Curtis dissimilarities of
+   the square root of the class area, which compare the amount of each cover and therefore combine the
+   proportions with the area of the unit, the response of the univariate models (the first NMDS axis of
+   this dissimilarity follows that area; Figure S1b); (b) on the same dissimilarity with log(OHE) entered
+   before the grouping factor; and (c) on Aitchison distances, after replacing the zeros of herbaceous
+   and shrub vegetation by 65% of one pixel, and again on the 59 units without zeros (Table S14b). It
+   runs after every other analysis of the script, so it changes none of their results.
 
 **Figures.** Figure 2 (composition) and Figure 3 (configuration) show one density ridge per genus. Each
 density is evaluated only within the possible range of its metric (for example, 0 to 100% for the
@@ -72,7 +75,7 @@ percentage of landscape), so that no ridge extends into impossible values.
 the fourteen-predictor analysis pool used by scripts 02 and 03.
 
 **Writes.** `Data_Raw_WithCoords.csv`, the input of scripts 02 to 08; Table 1; Figures 2 to 4; Tables S3
-to S8, S11 to S14 and S14b; `TableS_NMDS_Summary.csv`, `TableS_Metric_Repair_Log.csv` and
+to S8, S11 to S14 and S14b; Figure S1b; `TableS_NMDS_Summary.csv`, `TableS_Metric_Repair_Log.csv` and
 `TableS_Sample_Sizes_PartI.csv`.
 
 ---
