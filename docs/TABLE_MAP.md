@@ -21,8 +21,8 @@ Paths are relative to `Outputs/Manuscrito/`.
 | Figure 8, conservation value index | ArcGIS Pro, outside the R chain | not in the repository |
 | Table 1, global PERMANOVA | `01` | `PartI/TableS4_PERMANOVA_Global.csv` |
 | Table 2, marginal tests of the RDA | `02` | `PartII/TableII_4_RDA_Anova_Marginal.csv` |
-| Section 3.3, RDA biplot scores and the correlation of the first-axis site scores with forest cover | `02` | `PartII/TableII_4c_RDA_Biplot_Scores.csv`, `PartII/TableII_4d_RDA_Axis1_Forest.csv` |
-| Section 3.3, variation partitioning | `02` | `PartII/TableII_3_VP_Fractions.csv`, `PartII/TableII_3_VP_Significance.csv`; the global spatial test is in `PartII/TableII_4_RDA_GlobalSummary.csv` and, with the outcome of the selection, in `PartII/TableII_2a_MEM_Global_Test.csv` |
+| Section 4.3, RDA biplot scores and the correlation of the first-axis site scores with forest cover | `02` | `PartII/TableII_4c_RDA_Biplot_Scores.csv`, `PartII/TableII_4d_RDA_Axis1_Forest.csv` |
+| Section 4.3, variation partitioning | `02` | `PartII/TableII_3_VP_Fractions.csv`, `PartII/TableII_3_VP_Significance.csv`; the global spatial test is in `PartII/TableII_4_RDA_GlobalSummary.csv` and, with the outcome of the selection, in `PartII/TableII_2a_MEM_Global_Test.csv` |
 | Table 3, full a priori model | `03` | `Table_S_PartIII_ConfirmatoryModel.csv`; the sums of Akaike weights of the last column are in `Table_S_PartIII_VariableImportance.csv` |
 | Table 4, reported model of envelope extent | `05` | `PartV/TableS_PartV_Uncoupled_Model.csv` |
 
@@ -39,6 +39,7 @@ Paths are relative to `Outputs/Manuscrito/`.
 | S10, VIF of the partitioning pool | `02` | `PartII/TableII_1_VIF_VP.csv` |
 | S11, betadisper | `01` | `PartI/TableS3_Betadisper.csv` |
 | S12, S13, S14, pairwise PERMANOVA | `01` | `PartI/TableS5_PERMANOVA_Pairwise_Species.csv`, `..._Diet.csv`, `..._Locomotion.csv` |
+| S14b, the tests of composition on Hellinger distances | `01` | `PartI/TableS_Hellinger_PERMANOVA_Betadisper.csv`; the stress and the correlation of each NMDS axis with the envelope area and with forest cover, for both distances, are in `PartI/TableS_Hellinger_NMDS_Axes.csv`, and the pairwise tests in `PartI/TableS_Hellinger_PERMANOVA_Pairwise_Genus.csv` and `..._Species.csv` |
 | S15, descriptive statistics | `03` | `Table_S_PartIII_DescriptiveStatistics.csv` |
 | S16, comparison of the six specifications | `03` | `Table_S_PartIII_ModelComparison.csv` |
 | S17, residual diagnostics | `03` | `Table_S_PartIII_Diagnostics.csv` |
@@ -73,6 +74,7 @@ Paths are relative to `Outputs/Manuscrito/`.
 | S38b, screening of the spatial eigenvectors | `02`, `06` | `PartII/TableII_2a_MEM_Global_Test.csv`, `PartII/TableII_2_MEMs_Selected.csv`, `PartII/TableII_6_MEM_Global_Tests.csv`, `PartII/TableII_6c_Moran_I_Residuals.csv` |
 | S39, effect of the ordination transformation | `02` | `PartII/TableII_4b_RDA_Transformation_Comparison.csv`, `PartII/TableII_5_Response_Size_Dependence.csv` |
 | S39b, sequential term tests of the RDA | `02` | `PartII/TableII_4_RDA_Anova_Terms_Sequential.csv` |
+| S39c, RDA without the two patch densities | `02` | `PartII/TableII_4e_RDA_Without_Patch_Density.csv` |
 | S40, farming matrix without window-normalized predictors | `05` | `PartV/TableS_PartV_Matrix_Uncoupled.csv`; the second specification in the file, with matrix patch density, contains a ratio of the window and is a contrast, not an uncoupled estimate |
 | S41, thinning test for spatial coincidence | `05` | `PartV/TableS_PartV_Spatial_Thinning.csv` |
 | S42, sampling effort bounds | `08` | `PartVI/TableS42_Sampling_Effort.csv` |

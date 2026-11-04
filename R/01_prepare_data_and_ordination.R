@@ -33,6 +33,7 @@
 #     Figure3_Ridgeline_Configuration.tiff      (Figure 3)
 #     Figure1_NMDS_Composition_Genus.tiff       (Figure 4)
 #     Tables S3 to S8 and S11 to S14, and TableS_Sample_Sizes_PartI.csv (S27)
+#     TableS_Hellinger_*.csv                    (Table S14b, sensitivity)
 #
 # Guards
 #   Stops unless the input has 67 rows, all 67 carry coordinates, and all 67
@@ -1205,6 +1206,69 @@ message(sprintf(
 ))
 
 
+# 10.1 Sensitivity: the same tests on Hellinger distances (Table S14b) ---------
+# The Bray-Curtis dissimilarity of the square root of the class area combines
+# the proportions of the classes with the area of the unit, which is the
+# response of the univariate models. The Hellinger distance, the Euclidean
+# distance of the square root of the relative class area (Legendre & Gallagher
+# 2001), compares the proportions only, as the RDA of script 02 does. This block
+# repeats the NMDS, betadisper and PERMANOVA on that distance and reports how
+# closely each ordination axis follows the envelope area. It runs after every
+# other analysis of the script, so it changes none of their results.
+message("\n[Sensitivity] NMDS, betadisper and PERMANOVA on Hellinger distances...")
+
+LULC_hell      <- decostand(comp_vars, method = "hellinger")
+LULC_dist_hell <- vegdist(LULC_hell, method = "euclidean")
+
+set.seed(GLOBAL_SEED)
+nmds_hell <- metaMDS(LULC_dist_hell, k = 2, trymax = 200, trace = FALSE)
+
+# The sign of an NMDS axis is arbitrary, so the correlations are absolute.
+log_area <- log(data_raw$AOH_unit_area_ha)
+axis_cor <- function(nm, label) {
+  sc <- scores(nm, display = "sites")
+  data.frame(Distance             = label,
+             Stress               = round(nm$stress, 4),
+             abs_r_Axis1_logOHE   = round(abs(cor(sc[, 1], log_area)), 4),
+             abs_r_Axis2_logOHE   = round(abs(cor(sc[, 2], log_area)), 4),
+             abs_r_Axis1_PLAND_Forest = round(abs(cor(sc[, 1], data_raw$PLAND_Forest)), 4),
+             abs_r_Axis2_PLAND_Forest = round(abs(cor(sc[, 2], data_raw$PLAND_Forest)), 4))
+}
+write.csv(rbind(axis_cor(nmds_result, "Bray-Curtis, square root of class area"),
+                axis_cor(nmds_hell,   "Hellinger")),
+          file.path(output_path, "TableS_Hellinger_NMDS_Axes.csv"),
+          row.names = FALSE)
+
+group_labels <- c(GENUS = "Genus", SPECIES = "Species",
+                  DIET = "Diet", LOCOMOTION = "Locomotion")
+hell_tests <- lapply(names(group_labels), function(g) {
+  set.seed(GLOBAL_SEED)
+  ad <- adonis2(LULC_dist_hell ~ data_raw[[g]], permutations = N_PERM)
+  bd <- betadisper(LULC_dist_hell, data_raw[[g]])
+  set.seed(GLOBAL_SEED)
+  pt <- permutest(bd, permutations = N_PERM)
+  data.frame(Grouping       = group_labels[[g]],
+             Df             = ad$Df[1],
+             PERMANOVA_R2   = round(ad$R2[1], 4),
+             PERMANOVA_F    = round(ad$F[1], 4),
+             PERMANOVA_p    = ad$`Pr(>F)`[1],
+             PERMDISP_F     = round(pt$tab[1, "F"], 4),
+             PERMDISP_p     = pt$tab[1, "Pr(>F)"])
+})
+write.csv(do.call(rbind, hell_tests),
+          file.path(output_path, "TableS_Hellinger_PERMANOVA_Betadisper.csv"),
+          row.names = FALSE)
+write.csv(pairwise.adonis(LULC_hell, data_raw$GENUS, sim.method = "euclidean"),
+          file.path(output_path, "TableS_Hellinger_PERMANOVA_Pairwise_Genus.csv"),
+          row.names = FALSE)
+write.csv(pairwise.adonis(LULC_hell, data_raw$SPECIES, sim.method = "euclidean"),
+          file.path(output_path, "TableS_Hellinger_PERMANOVA_Pairwise_Species.csv"),
+          row.names = FALSE)
+message(sprintf("   Hellinger: stress = %.4f; genus PERMANOVA R2 = %.3f, p = %.4f.",
+                nmds_hell$stress, hell_tests[[1]]$PERMANOVA_R2,
+                hell_tests[[1]]$PERMANOVA_p))
+
+
 # 11. Output inventory [10/10] -------------------------------------------------
 message("\n[10/10] All analyses of script 01 completed.")
 message("\nOutputs in: ", output_path)
@@ -1223,6 +1287,7 @@ message("    TableS4_PERMANOVA_Global.csv")
 message("    TableS5_PERMANOVA_Pairwise_{Genus,Species,Diet,Locomotion}.csv")
 message("    TableS_Metric_Repair_Log.csv            (cells filled from script 00)")
 message("    TableS_Sample_Sizes_PartI.csv           (n per analysis; all = 67)")
+message("    TableS_Hellinger_*.csv                  (Table S14b, sensitivity)")
 message("\nData written for scripts 02 to 08:")
 message("    ", file.path(data_path, "Data_Raw_WithCoords.csv"))
 
