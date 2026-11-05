@@ -14,12 +14,12 @@ Paths are relative to `Outputs/Manuscrito/`.
 | Figure 1, study area map | ArcGIS Pro, outside the R chain | not in the repository; see Supplementary Section 5 |
 | Figure 2, composition ridgelines | `01` | `PartI/Figure2_Ridgeline_Composition.tiff` |
 | Figure 3, configuration ridgelines | `01` | `PartI/Figure3_Ridgeline_Configuration.tiff` |
-| Figure 4, NMDS | `01` | `PartI/Figure1_NMDS_Composition_Genus.tiff` |
+| Figure 4, NMDS on Hellinger distances | `01` | `PartI/Figure1_NMDS_Composition_Genus.tiff` |
 | Figure 5, RDA biplot | `02` | `PartII/Figure_RDA_Biplot.tiff` |
 | Figure 6, coefficients of the reported model | `05` | `PartV/Figure_PV_02_Reported_Model_Coefficients.tiff` |
 | Figure 7, genus-level effect heatmap | `03` | `Figure_PIII_08_Effect_Heatmap.tiff` |
 | Figure 8, conservation value index | ArcGIS Pro, outside the R chain | not in the repository |
-| Table 1, global PERMANOVA | `01` | `PartI/TableS4_PERMANOVA_Global.csv` |
+| Table 1, global PERMANOVA on Hellinger distances | `01` | `PartI/TableS4_PERMANOVA_Global.csv` |
 | Table 2, marginal tests of the RDA | `02` | `PartII/TableII_4_RDA_Anova_Marginal.csv` |
 | Section 4.3, RDA biplot scores and the correlation of the first-axis site scores with forest cover | `02` | `PartII/TableII_4c_RDA_Biplot_Scores.csv`, `PartII/TableII_4d_RDA_Axis1_Forest.csv` |
 | Section 4.3, variation partitioning | `02` | `PartII/TableII_3_VP_Fractions.csv`, `PartII/TableII_3_VP_Significance.csv`; the global spatial test is in `PartII/TableII_4_RDA_GlobalSummary.csv` and, with the outcome of the selection, in `PartII/TableII_2a_MEM_Global_Test.csv` |
@@ -39,7 +39,7 @@ Paths are relative to `Outputs/Manuscrito/`.
 | S10, VIF of the partitioning pool | `02` | `PartII/TableII_1_VIF_VP.csv` |
 | S11, betadisper | `01` | `PartI/TableS3_Betadisper.csv` |
 | S12, S13, S14, pairwise PERMANOVA | `01` | `PartI/TableS5_PERMANOVA_Pairwise_Species.csv`, `..._Diet.csv`, `..._Locomotion.csv` |
-| S14b, the tests of composition on Hellinger distances | `01` | `PartI/TableS_Hellinger_PERMANOVA_Betadisper.csv`; the stress and the correlation of each NMDS axis with the envelope area and with forest cover, for both distances, are in `PartI/TableS_Hellinger_NMDS_Axes.csv`, and the pairwise tests in `PartI/TableS_Hellinger_PERMANOVA_Pairwise_Genus.csv` and `..._Species.csv` |
+| S14b, sensitivity of the composition tests to the distance | `01` | `PartI/TableS_Sensitivity_Composition_Tests.csv` (Bray-Curtis on the square root of class area; the same with log(OHE) first; Aitchison, on all units and on the 59 without zeros); the stress and the correlation of each NMDS axis with the envelope area and with forest cover are in `PartI/TableS_Sensitivity_NMDS_Axes.csv`, the variance of each class on the Hellinger and log-ratio scales in `PartI/TableS_Sensitivity_Class_Variance.csv`, and the Bray-Curtis pairwise tests in `PartI/TableS_BrayCurtis_PERMANOVA_Pairwise_Genus.csv` and `..._Species.csv` |
 | S15, descriptive statistics | `03` | `Table_S_PartIII_DescriptiveStatistics.csv` |
 | S16, comparison of the six specifications | `03` | `Table_S_PartIII_ModelComparison.csv` |
 | S17, residual diagnostics | `03` | `Table_S_PartIII_Diagnostics.csv` |
@@ -80,6 +80,7 @@ Paths are relative to `Outputs/Manuscrito/`.
 | S42, sampling effort bounds | `08` | `PartVI/TableS42_Sampling_Effort.csv` |
 | S42b, sampling effort robustness | `08` | `PartVI/TableS42b_Sampling_Effort_Robustness.csv` |
 | Figure S1, correlation matrix | `02` | `PartII/FigS1_Collinearity_Pearson.tiff` |
+| Figure S1b, NMDS of Bray-Curtis dissimilarities of class area | `01` | `PartI/FigureS_NMDS_BrayCurtis_Genus.tiff`; the fitted vectors are in `PartI/TableS_BrayCurtis_Envfit.csv` |
 | Figure S2, response transformation | `03` | `Figure_PIII_01_Response_Transformation.tiff` |
 | Figure S3, variable importance | `03` | `Figure_PIII_03_Variable_Importance.tiff` |
 | Figure S4, partial effects | `03` | `Figure_PIII_04_Partial_Effects.tiff` |

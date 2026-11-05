@@ -60,8 +60,9 @@ Dados/Rasters/UA_RASTER/           67 per-unit rasters, read by script 00 (not t
 Dados/Shapefiles/                  hexagonal grid and the conservation value index layers
 08_Dados_Especies/                 per-taxon envelope polygons, read by scripts 01 and 08
 Outputs/                           archived tables and figures, one subfolder per part: the run of
-                                   16 October 2026, plus the sensitivity tables that scripts 01 and 02
-                                   added on 4 November 2026; the scripts write new copies to
+                                   16 October 2026, with the outputs of scripts 01 and 02 from their
+                                   reruns of 4 November 2026 (composition on Hellinger distances and
+                                   the sensitivity tables); the scripts write new copies to
                                    Outputs/Manuscrito/
 arcpy_AOH_area_full_precision.py   exports the envelope areas at full precision from ArcGIS Pro
 ```
@@ -83,7 +84,7 @@ Two inputs are not tracked, because of their size or origin:
 | Script | What it does | Reads | Main outputs |
 |---|---|---|---|
 | `00_recompute_class_metrics.R` | Recomputes the class-level metrics from the rasters and fills the empty cells of two units | rasters, FRAGSTATS patch tables, `Data_Raw_FINAL.csv` | `Tabela_Metricas_Recomputada.csv`, Tables S32 and S33 |
-| `01_prepare_data_and_ordination.R` | Builds the analytical dataset; NMDS, envfit, betadisper and PERMANOVA of composition, repeated on Hellinger distances | `Data_Raw_FINAL.csv`, script 00 table, shapefiles | `Data_Raw_WithCoords.csv`, Table 1, Figures 2 to 4, Table S14b |
+| `01_prepare_data_and_ordination.R` | Builds the analytical dataset; NMDS, envfit, betadisper and PERMANOVA of composition on Hellinger distances, repeated on Bray-Curtis dissimilarities of class area, with envelope size entered first, and on Aitchison distances | `Data_Raw_FINAL.csv`, script 00 table, shapefiles | `Data_Raw_WithCoords.csv`, Table 1, Figures 2 to 4, Table S14b, Figure S1b |
 | `02_constrained_ordination_and_partitioning.R` | Collinearity screening, variation partitioning (landscape against space) and RDA of composition, also without the two patch densities | `Data_Raw_WithCoords.csv` | Table 2, Table S39c, Figures 5, S1 and S8 |
 | `03_univariate_model_selection.R` | Six specifications compared; the full a priori model; spatial sensitivity; selection uncertainty; genus-level slopes | `Data_Raw_WithCoords.csv`, Moran eigenvectors of script 02 | Table 3, Figure 7, Figures S2 to S7 and S10 |
 | `04_geometric_coupling_diagnostic.R` | Checks the identity that ties patch density to the response | `Data_Raw_WithCoords.csv` | Table S26 |
@@ -118,10 +119,11 @@ the slowest; script 00 takes a few minutes.
 - Cross-validation is exact leave-one-out, with leave-one-genus-out reported beside it.
 - AICc and BIC are both reported.
 - Term tests in the redundancy analysis are marginal; the sequential tests are exported for comparison.
-- The redundancy analysis uses Hellinger-transformed class areas, so that the size of the sampling window
-  does not enter the analysis of composition. The NMDS and PERMANOVA of script 01 use Bray-Curtis
-  dissimilarities of the square root of the class area, whose first axis follows the window size, and
-  are repeated on Hellinger distances (Table S14b).
+- Composition is analyzed on Hellinger distances in both script 01 (NMDS, betadisper, PERMANOVA) and
+  script 02 (redundancy analysis), so that the size of the sampling window, which is the response of the
+  univariate models, does not enter the analysis of composition. Script 01 repeats the tests on
+  Bray-Curtis dissimilarities of the square root of the class area, whose first NMDS axis follows the
+  window size, with the window size entered first, and on Aitchison distances (Table S14b).
 - `sessionInfo()` is printed at the end of every script and written to `session_info_part*.txt` in the
   output folder.
 - Figures are written as TIFF files at 500 dpi with LZW compression, with Okabe-Ito colors, which remain
