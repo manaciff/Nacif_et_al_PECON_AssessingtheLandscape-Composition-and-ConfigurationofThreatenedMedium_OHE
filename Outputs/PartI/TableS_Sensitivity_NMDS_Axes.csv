@@ -1,3 +1,3 @@
 "Distance","Stress","abs_r_Axis1_logOHE","abs_r_Axis2_logOHE","abs_r_Axis1_PLAND_Forest","abs_r_Axis2_PLAND_Forest"
-"Bray-Curtis, square root of class area",0.0844,0.9966,0.0172,0.1463,0.9587
 "Hellinger",0.0014,0.1169,0.2643,0.9964,0.0098
+"Bray-Curtis, square root of class area",0.0844,0.9966,0.0172,0.1463,0.9587

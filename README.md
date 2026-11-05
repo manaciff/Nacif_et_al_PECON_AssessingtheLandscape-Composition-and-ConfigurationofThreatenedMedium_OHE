@@ -60,8 +60,9 @@ Dados/Rasters/UA_RASTER/           67 per-unit rasters, read by script 00 (not t
 Dados/Shapefiles/                  hexagonal grid and the conservation value index layers
 08_Dados_Especies/                 per-taxon envelope polygons, read by scripts 01 and 08
 Outputs/                           archived tables and figures, one subfolder per part: the run of
-                                   16 October 2026, plus the sensitivity tables that scripts 01 and 02
-                                   added on 4 November 2026; the scripts write new copies to
+                                   16 October 2026, with the outputs of scripts 01 and 02 from their
+                                   reruns of 4 November 2026 (composition on Hellinger distances and
+                                   the sensitivity tables); the scripts write new copies to
                                    Outputs/Manuscrito/
 arcpy_AOH_area_full_precision.py   exports the envelope areas at full precision from ArcGIS Pro
 ```
