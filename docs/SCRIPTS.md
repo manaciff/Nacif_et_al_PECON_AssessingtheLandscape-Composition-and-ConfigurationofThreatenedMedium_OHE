@@ -66,6 +66,12 @@ differ among taxonomic and functional groups?
    before the grouping factor; and (c) on Aitchison distances, after replacing the zeros of herbaceous
    and shrub vegetation by 65% of one pixel, and again on the 59 units without zeros (Table S14b). It
    runs after every other analysis of the script, so it changes none of their results.
+8. **The species test and space.** A sampling unit is a replicate of its taxon only, so the species test
+   is the one that compares the envelopes of the taxa; Table 1 adds its adjusted R². Section 10.2 checks
+   the independence that the test assumes: a Mantel correlogram of the residuals of composition ~
+   species, then the test repeated after distance-based Moran eigenvector maps of the centroids,
+   screened against composition by forward selection, with the partition of composition between species
+   and space. Like Section 10.1, it changes none of the results above.
 
 **Figures.** Figure 2 (composition) and Figure 3 (configuration) show one density ridge per genus. Each
 density is evaluated only within the possible range of its metric (for example, 0 to 100% for the
@@ -75,8 +81,9 @@ percentage of landscape), so that no ridge extends into impossible values.
 the fourteen-predictor analysis pool used by scripts 02 and 03.
 
 **Writes.** `Data_Raw_WithCoords.csv`, the input of scripts 02 to 08; Table 1; Figures 2 to 4; Tables S3
-to S8, S11 to S14 and S14b; Figure S1b; `TableS_NMDS_Summary.csv`, `TableS_Metric_Repair_Log.csv` and
-`TableS_Sample_Sizes_PartI.csv`.
+to S8, S11 to S14 and S14b; Figure S1b; `TableS_NMDS_Summary.csv`, `TableS_Metric_Repair_Log.csv`,
+`TableS_Sample_Sizes_PartI.csv`, `TableS_Spatial_Residual_Correlogram.csv` and
+`TableS_Spatial_Species_Test.csv`.
 
 ---
 

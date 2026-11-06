@@ -21,6 +21,9 @@
 #   4. Repeats the tests on the amount of each cover (Bray-Curtis on the square
 #      root of class area), with envelope size entered first, and on the
 #      Aitchison distance, as sensitivity checks (Table S14b).
+#   5. Checks the spatial independence that the species test assumes: a Mantel
+#      correlogram of its residuals, and the test repeated after Moran
+#      eigenvector maps of the centroids (Section 10.2).
 #
 # Input
 #   Dados/Processados/Data_Raw_FINAL.csv               consolidated table
@@ -39,6 +42,8 @@
 #     Tables S3 to S8 and S11 to S14, and TableS_Sample_Sizes_PartI.csv (S27)
 #     TableS_Sensitivity_*.csv, TableS_BrayCurtis_*.csv and
 #     FigureS_NMDS_BrayCurtis_Genus.tiff        (Table S14b, Figure S1b)
+#     TableS_Spatial_Residual_Correlogram.csv and
+#     TableS_Spatial_Species_Test.csv           (Section 10.2)
 #
 # Guards
 #   Stops unless the input has 67 rows, all 67 carry coordinates, and all 67
@@ -59,6 +64,7 @@ suppressPackageStartupMessages({
   library(ggridges)      # ridgeline density plots
   library(ggrepel)       # non-overlapping labels in the NMDS figure
   library(scales)        # axis formatting
+  library(adespatial)    # dbmem(), forward.sel(): spatial check (Section 10.2)
 })
 
 GLOBAL_SEED <- 123
@@ -148,14 +154,18 @@ canonical_taxon <- function(x) {
   out
 }
 
-# One row of a global PERMANOVA table.
+# One row of a global PERMANOVA table. R2_adj discounts the R2 that a factor
+# reaches by chance alone, (k - 1)/(n - 1): 0.12 for nine species and 67 units
+# (adjusted R2; Peres-Neto et al. 2006).
 tidy_adonis <- function(adonis_obj, group_label) {
-  row <- as.data.frame(adonis_obj)[1L, , drop = FALSE]
+  tab <- as.data.frame(adonis_obj)
+  row <- tab[1L, , drop = FALSE]
   data.frame(
     Grouping = group_label,
     Df       = row$Df,
     SumOfSqs = round(row$SumOfSqs, 4),
     R2       = round(row$R2, 4),
+    R2_adj   = round(1 - (1 - row$R2) * tab["Total", "Df"] / tab["Residual", "Df"], 4),
     F_value  = round(row$F, 4),
     p_value  = row[["Pr(>F)"]]
   )
@@ -175,8 +185,13 @@ pairwise.adonis <- function(x, factors,
   for (elem in seq_len(ncol(co))) {
     sub_idx <- factors %in% c(co[1, elem], co[2, elem])
     x1 <- vegdist(x[sub_idx, , drop = FALSE], method = sim.method)
+    # droplevels(): the subset of a factor keeps the levels of the other
+    # groups, empty, and with empty levels the compiled code of adonis2()
+    # (do_getF, vegan 2.7-5) reads and writes outside its memory, which can
+    # abort the R session. Dropping them changes no result.
+    grp <- droplevels(as.factor(factors)[sub_idx])
     set.seed(seed)
-    ad <- adonis2(x1 ~ factors[sub_idx], permutations = n_perm)
+    ad <- adonis2(x1 ~ grp, permutations = n_perm)
     pairs   <- c(pairs, paste(co[1, elem], "vs", co[2, elem]))
     F.Model <- c(F.Model, ad$F[1])
     R2      <- c(R2, ad$R2[1])
@@ -780,7 +795,11 @@ write.csv(betadisper_results,
           file.path(output_path, "TableS3_Betadisper.csv"),
           row.names = FALSE)
 
-# PERMANOVA
+# PERMANOVA. A sampling unit is a replicate of its taxon only. Genus, diet and
+# locomotion are constant within a taxon, so their tests describe this
+# assemblage rather than test genera or guilds (Hurlbert 1984); the species
+# test answers whether the envelopes of the taxa differ. Section 10.2 checks
+# the spatial independence that the species test assumes.
 set.seed(GLOBAL_SEED)
 adonis_genus   <- adonis2(LULC_dist ~ GENUS,      data = data_raw, permutations = N_PERM)
 set.seed(GLOBAL_SEED)
@@ -1385,6 +1404,97 @@ message(sprintf(paste0("   Bray-Curtis: stress = %.4f; genus R2 = %.3f, p = %.4f
                 sens_tests$PERMANOVA_p[6], sens_tests$PERMANOVA_p[13]))
 
 
+# 10.2 Sensitivity: the species test and space ---------------------------------
+# The species test of Section 5 permutes the 67 units as if they were
+# independent. Units close to each other share part of their landscape, and
+# envelopes of different taxa often overlap, so the assumption is checked:
+#   (a) Mantel correlogram of the residuals of composition ~ species (Hellinger)
+#       against the distance between centroids;
+#   (b) distance-based Moran eigenvector maps (dbMEM) of the centroids, built as
+#       in script 02 (positive autocorrelation, truncation at the longest edge of
+#       the minimum spanning tree), screened against composition by a global
+#       test and forward selection with the double stopping criterion
+#       (Blanchet et al. 2008);
+#   (c) the species test after the retained MEMs (sequential sums of squares),
+#       repeated after all positive MEMs, which involves no selection, and the
+#       partition of composition between species and space (adjusted R2).
+# Like Section 10.1, it runs after every other analysis and changes none of the
+# results above.
+message("\n[Sensitivity] Species test after the spatial structure of composition...")
+
+coords_xy <- as.matrix(data_raw[, c("coord_x", "coord_y")])
+hell_mat  <- as.matrix(LULC_hell)
+
+# (a) Residual autocorrelation of the species model
+res_species <- residuals(lm(hell_mat ~ SPECIES, data = data_raw))
+set.seed(GLOBAL_SEED)
+correlog <- mantel.correlog(dist(res_species), XY = coords_xy / 1000,
+                            nperm = N_PERM)
+cg <- as.data.frame(correlog$mantel.res)
+cg <- cg[!is.na(cg$Mantel.cor), ]
+write.csv(data.frame(Class_center_km = round(cg$class.index, 1),
+                     N_pairs         = cg$n.dist,
+                     Mantel_r        = round(cg$Mantel.cor, 4),
+                     p_Holm          = cg[["Pr(corrected)"]]),
+          file.path(output_path, "TableS_Spatial_Residual_Correlogram.csv"),
+          row.names = FALSE)
+
+# (b) MEMs screened against composition
+set.seed(GLOBAL_SEED)
+mem_comp     <- dbmem(coords_xy, MEM.autocor = "positive", silent = TRUE)
+mem_comp_rda <- rda(hell_mat ~ ., data = as.data.frame(mem_comp))
+set.seed(GLOBAL_SEED)
+mem_comp_p   <- anova(mem_comp_rda, permutations = N_PERM)$`Pr(>F)`[1]
+mem_comp_r2a <- RsquareAdj(mem_comp_rda)$adj.r.squared
+
+space_tab <- data.frame(
+  Quantity = c("Positive dbMEMs", "Truncation distance (km)",
+               "Composition ~ all positive MEMs, adjusted R2",
+               "Composition ~ all positive MEMs, p",
+               "Species alone, F", "Species alone, p"),
+  Value    = c(ncol(mem_comp), round(give.thresh(dist(coords_xy)) / 1000, 1),
+               round(mem_comp_r2a, 4), mem_comp_p,
+               round(adonis_species$F[1], 4), adonis_species$`Pr(>F)`[1]))
+
+# (c) Species after space
+species_after <- function(Z, label) {
+  # The MEMs travel inside `data`: adonis2() does not look up the formula
+  # variables in the environment of this function.
+  d_z   <- data.frame(SPECIES = data_raw$SPECIES)
+  d_z$Z <- Z
+  set.seed(GLOBAL_SEED)
+  ad <- adonis2(LULC_dist ~ Z + SPECIES, data = d_z, by = "terms",
+                permutations = N_PERM)
+  data.frame(Quantity = paste0("Species after ", label, c(", F", ", p")),
+             Value    = c(round(ad["SPECIES", "F"], 4), ad["SPECIES", "Pr(>F)"]))
+}
+
+if (mem_comp_p <= 0.05) {
+  set.seed(GLOBAL_SEED)
+  invisible(capture.output(
+    mem_comp_sel <- forward.sel(hell_mat, as.matrix(mem_comp), alpha = 0.05,
+                                adjR2thresh = mem_comp_r2a, nperm = N_PERM)))
+  mem_kept <- as.matrix(mem_comp[, mem_comp_sel$variables, drop = FALSE])
+  vp <- varpart(hell_mat, ~ SPECIES, mem_kept, data = data_raw)$part$indfract
+  space_tab <- rbind(
+    space_tab,
+    data.frame(Quantity = "MEMs retained by forward selection",
+               Value    = paste(mem_comp_sel$variables, collapse = " ")),
+    species_after(mem_kept, "the retained MEMs"),
+    species_after(as.matrix(mem_comp), "all positive MEMs"),
+    data.frame(Quantity = paste("Adjusted R2,", c("species only", "space only",
+                                                  "shared", "residual")),
+               Value    = round(vp$Adj.R.squared, 4)))
+} else {
+  message("   The MEMs explain no composition (p > 0.05); the species test stands.")
+}
+write.csv(space_tab, file.path(output_path, "TableS_Spatial_Species_Test.csv"),
+          row.names = FALSE)
+message(sprintf("   Residual Mantel r in the first distance class = %.3f (p = %.4f).",
+                cg$Mantel.cor[1], cg[["Pr(corrected)"]][1]))
+print(space_tab, row.names = FALSE)
+
+
 # 11. Output inventory [10/10] -------------------------------------------------
 message("\n[10/10] All analyses of script 01 completed.")
 message("\nOutputs in: ", output_path)
@@ -1405,6 +1515,7 @@ message("    TableS5_PERMANOVA_Pairwise_{Genus,Species,Diet,Locomotion}.csv")
 message("    TableS_Metric_Repair_Log.csv            (cells filled from script 00)")
 message("    TableS_Sample_Sizes_PartI.csv           (n per analysis; all = 67)")
 message("    TableS_Sensitivity_*.csv, TableS_BrayCurtis_*.csv (Table S14b)")
+message("    TableS_Spatial_*.csv                    (species test and space, Section 10.2)")
 message("\nData written for scripts 02 to 08:")
 message("    ", file.path(data_path, "Data_Raw_WithCoords.csv"))
 
