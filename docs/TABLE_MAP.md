@@ -19,7 +19,7 @@ Paths are relative to `Outputs/Manuscrito/`.
 | Figure 6, coefficients of the reported model | `05` | `PartV/Figure_PV_02_Reported_Model_Coefficients.tiff` |
 | Figure 7, genus-level effect heatmap | `03` | `Figure_PIII_08_Effect_Heatmap.tiff` |
 | Figure 8, conservation value index | ArcGIS Pro, outside the R chain | not in the repository |
-| Table 1, global PERMANOVA on Hellinger distances | `01` | `PartI/TableS4_PERMANOVA_Global.csv` |
+| Table 1, global PERMANOVA on Hellinger distances, with the adjusted R2 | `01` | `PartI/TableS4_PERMANOVA_Global.csv` (adjusted R2 in the column `R2_adj`) |
 | Table 2, marginal tests of the RDA | `02` | `PartII/TableII_4_RDA_Anova_Marginal.csv` |
 | Section 4.3, RDA biplot scores and the correlation of the first-axis site scores with forest cover | `02` | `PartII/TableII_4c_RDA_Biplot_Scores.csv`, `PartII/TableII_4d_RDA_Axis1_Forest.csv` |
 | Section 4.3, variation partitioning | `02` | `PartII/TableII_3_VP_Fractions.csv`, `PartII/TableII_3_VP_Significance.csv`; the global spatial test is in `PartII/TableII_4_RDA_GlobalSummary.csv` and, with the outcome of the selection, in `PartII/TableII_2a_MEM_Global_Test.csv` |
@@ -40,6 +40,7 @@ Paths are relative to `Outputs/Manuscrito/`.
 | S11, betadisper | `01` | `PartI/TableS3_Betadisper.csv` |
 | S12, S13, S14, pairwise PERMANOVA | `01` | `PartI/TableS5_PERMANOVA_Pairwise_Species.csv`, `..._Diet.csv`, `..._Locomotion.csv` |
 | S14b, sensitivity of the composition tests to the distance | `01` | `PartI/TableS_Sensitivity_Composition_Tests.csv` (Bray-Curtis on the square root of class area; the same with log(OHE) first; Aitchison, on all units and on the 59 without zeros); the stress and the correlation of each NMDS axis with the envelope area and with forest cover are in `PartI/TableS_Sensitivity_NMDS_Axes.csv`, the variance of each class on the Hellinger and log-ratio scales in `PartI/TableS_Sensitivity_Class_Variance.csv`, and the Bray-Curtis pairwise tests in `PartI/TableS_BrayCurtis_PERMANOVA_Pairwise_Genus.csv` and `..._Species.csv` |
+| S14c, spatial check of the species test | `01` | `PartI/TableS_Spatial_Residual_Correlogram.csv` (Mantel correlogram of the residuals of the species test) and `PartI/TableS_Spatial_Species_Test.csv` (Moran eigenvector maps, the species test before and after them, and the partition by adjusted R2) |
 | S15, descriptive statistics | `03` | `Table_S_PartIII_DescriptiveStatistics.csv` |
 | S16, comparison of the six specifications | `03` | `Table_S_PartIII_ModelComparison.csv` |
 | S17, residual diagnostics | `03` | `Table_S_PartIII_Diagnostics.csv` |
